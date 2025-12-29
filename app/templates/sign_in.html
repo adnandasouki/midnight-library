@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <main class="auth-page">
+      <section class="auth-card card-md">
+        <!-- LOCAL SIGN IN -->
+        <form id="signin-form" class="auth-form">
+          <header class="auth-header">
+            <a href="/">
+              <div class="navbar-brand">
+                <img
+                  src="{{ url_for('static', filename='assets/brand.svg') }}"
+                  alt="brand"
+                />
+                <span>Library System</span>
+              </div>
+            </a>
+            <h3>Sign In</h3>
+            <p>Sign in to your account</p>
+          </header>
+
+          <!-- inputs -->
+          <div class="auth-fields">
+            <input
+              type="text"
+              class="field"
+              placeholder="Username or email"
+              name="username-or-email"
+            />
+
+            <input
+              type="password"
+              class="field"
+              placeholder="password"
+              name="password"
+            />
+          </div>
+
+          <!-- submit -->
+          <button type="submit" class="btn btn-primary btn-full">
+            Sign In
+          </button>
+        </form>
+
+        <!-- DIVIDER -->
+        <div class="auth-divider">
+          <span>or</span>
+        </div>
+
+        <!-- LING TO SIGN UP -->
+        <div class="has-account">
+          <p>Don't have an account? <a href="/signup">Sign up</a></p>
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="auth-divider">
+          <span>or</span>
+        </div>
+
+        <!-- GOOGLE AUTH -->
+        <div class="oauth-section">
+          <button id="oauth-google" class="btn btn-outline" type="button">
+            <img
+              src="/static/assets/google-icon.svg"
+              class="btn-icon"
+              alt="Google"
+            />
+            <span>Continue with Google</span>
+          </button>
+        </div>
+
+        <!-- GEUST ACCESS -->
+        <div class="continue-as-guest">
+          <a href="/">
+            <button type="button" class="btn btn-guest">
+              <p>Continue as Guest</p>
+            </button>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- script -->
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/app.js') }}"
+    ></script>
+  </body>
+</html>

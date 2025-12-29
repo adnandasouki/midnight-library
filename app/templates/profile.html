@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <!-- navbar -->
+    <nav class="navbar">
+      <!-- brand -->
+      <div class="navbar-wrapper">
+        <a href="/">
+          <div class="navbar-brand">
+            <img
+              src="{{ url_for('static', filename='assets/brand.svg') }}"
+              alt="brand"
+            />
+            <span>Library System</span>
+          </div>
+        </a>
+
+        <div class="navbar-buttons" id="auth-buttons">
+          <!-- user -->
+          <div class="avatar-dropdown hidden" id="avatar-dropdown">
+            <button
+              id="avatar-nav-btn"
+              class="avatar-sm"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span id="avatar-letter"></span>
+            </button>
+
+            <ul id="avatar-menu" class="avatar-menu">
+              <li class="menu-item">
+                <a href="/user/profile" class="btn-text" id="profile-btn"
+                  >Profile</a
+                >
+              </li>
+              <li class="menu-item">Settings</li>
+              <li class="divider"></li>
+              <li class="menu-item">
+                <button class="btn-text" id="signout-btn">Sign out</button>
+              </li>
+            </ul>
+          </div>
+          <!-- guest -->
+          <button id="signin-btn" class="btn btn-outline hidden">
+            Sign in
+          </button>
+          <button id="signup-btn" class="btn btn-primary hidden">
+            Sign up
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- main content -->
+    <main class="profile-page">
+      <div id="toast" class="toast"></div>
+
+      <!-- identity -->
+      <section class="identity-card card-md">
+        <div class="identity-header">
+          <div class="avatar" id="profile-avatar"></div>
+          <div class="identity-info">
+            <span class="username" id="profile-username"></span>
+            <span class="email" id="profile-email"></span>
+          </div>
+        </div>
+
+        <span class="joined" id="date-joined"></span>
+      </section>
+
+      <!-- active borrowings -->
+      <section class="user-active-borrowings card-md">
+        <div class="table-header">
+          <h4 class="title">Active Borrowings</h4>
+        </div>
+        <!-- table -->
+        <table class="user-books">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Borrowed Date</th>
+              <th>Due Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="active-borrowings"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <!-- script -->
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/app.js') }}"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Books</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <!-- navbar -->
+    <nav class="navbar">
+      <!-- brand -->
+      <div class="navbar-wrapper">
+        <a href="/">
+          <div class="navbar-brand">
+            <img
+              src="{{ url_for('static', filename='assets/brand.svg') }}"
+              alt="brand"
+            />
+            <span>Library System</span>
+          </div>
+        </a>
+
+        <div class="navbar-buttons" id="auth-buttons">
+          <!-- user -->
+          <div class="avatar-dropdown hidden" id="avatar-dropdown">
+            <button
+              id="avatar-nav-btn"
+              class="avatar-sm"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span id="avatar-letter"></span>
+            </button>
+
+            <ul id="avatar-menu" class="avatar-menu">
+              <!-- admin links -->
+              <li class="menu-item hidden" id="overview-link">
+                <a href="/admin" class="btn-text">Overview</a>
+              </li>
+              <li class="menu-item hidden" id="manage-books-link">
+                <a href="/admin/manage-books" class="btn-text">Books</a>
+              </li>
+              <li class="menu-item hidden" id="manage-users-link">
+                <a href="/admin/manage-users" class="btn-text">Users</a>
+              </li>
+              <li class="menu-item hidden" id="manage-borrowings-link">
+                <a href="/admin/manage-borrowings" class="btn-text"
+                  >Borrowings</a
+                >
+              </li>
+              <!-- user links -->
+              <li class="menu-item hidden" id="profile-link">
+                <a href="/user/profile" class="btn-text">Profile</a>
+              </li>
+              <li class="menu-item hidden" id="settings-link">Settings</li>
+              <li class="divider"></li>
+              <li class="menu-item">
+                <button class="btn-text" id="signout-btn">Sign out</button>
+              </li>
+            </ul>
+          </div>
+          <!-- guest -->
+          <button id="signin-btn" class="btn btn-outline hidden">
+            Sign in
+          </button>
+          <button id="signup-btn" class="btn btn-primary hidden">
+            Sign up
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- add model -->
+    <div id="add-user-model" class="model hidden">
+      <div class="model-content">
+        <h2>Add User</h2>
+        <!-- add form -->
+        <form class="add-user-form" id="add-user-form" data-user-id="">
+          <input
+            class="field-model"
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+          />
+          <input
+            class="field-model"
+            type="text"
+            name="email"
+            placeholder="Email"
+            required
+          />
+          <input
+            class="field-model"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <div class="model-buttons">
+            <button class="btn-model" type="button" id="close-add-user-model">
+              Cancel
+            </button>
+            <button class="btn-model" type="submit">Add User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- edit model -->
+    <div id="edit-user-model" class="model hidden">
+      <div class="model-content">
+        <h2>Edit User</h2>
+        <!-- edit form -->
+        <form class="edit-user-form" id="edit-user-form" data-book-id="">
+          <input
+            class="field-model"
+            type="text"
+            name="username"
+            placeholder="Username"
+          />
+          <input
+            class="field-model"
+            type="text"
+            name="email"
+            placeholder="Email"
+          />
+          <div class="model-buttons">
+            <button class="btn-model" type="button" id="close-edit-user-model">
+              Cancel
+            </button>
+            <button class="btn-model" type="submit">Update User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- main content -->
+    <main class="manage-page">
+      <div id="toast" class="toast"></div>
+      <section class="manage-users-card card-md">
+        <!-- header -->
+        <header class="table-header">
+          <!-- title -->
+          <div class="header-title">
+            <h4 class="table-title">Users</h4>
+            <input
+              type="text"
+              id="search-users-table"
+              placeholder="search for user, email"
+              class="field-search-table"
+              name="search"
+            />
+          </div>
+          <!-- actions -->
+          <div class="header-actions">
+            <button
+              type="button"
+              id="open-add-user-model"
+              class="btn btn-outline"
+            >
+              Add user
+            </button>
+          </div>
+        </header>
+        <!-- table -->
+        <table class="manage-users-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Joined Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="manage-users-data"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/app.js') }}"
+    ></script>
+  </body>
+</html>

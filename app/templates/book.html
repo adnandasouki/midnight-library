@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <!-- navbar -->
+    <nav class="navbar">
+      <!-- brand -->
+      <div class="navbar-wrapper">
+        <a href="/">
+          <div class="navbar-brand">
+            <img
+              src="{{ url_for('static', filename='assets/brand.svg') }}"
+              alt="brand"
+            />
+            <span>Library System</span>
+          </div>
+        </a>
+
+        <div class="navbar-buttons" id="auth-buttons">
+          <!-- user -->
+          <div class="avatar-dropdown hidden" id="avatar-dropdown">
+            <button
+              id="avatar-nav-btn"
+              class="avatar-sm"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span id="avatar-letter"></span>
+            </button>
+
+            <ul id="avatar-menu" class="avatar-menu">
+              <!-- admin links -->
+              <li class="menu-item hidden" id="overview-link">
+                <a href="/admin" class="btn-text">Overview</a>
+              </li>
+              <li class="menu-item hidden" id="manage-books-link">
+                <a href="/admin/manage-books" class="btn-text">Books</a>
+              </li>
+              <li class="menu-item hidden" id="manage-users-link">
+                <a href="/admin/manage-users" class="btn-text">Users</a>
+              </li>
+              <li class="menu-item hidden" id="manage-borrowings-link">
+                <a href="/admin/manage-borrowings" class="btn-text"
+                  >Borrowings</a
+                >
+              </li>
+              <!-- user links -->
+              <li class="menu-item hidden" id="profile-link">
+                <a href="/user/profile" class="btn-text">Profile</a>
+              </li>
+              <li class="menu-item hidden" id="settings-link">Settings</li>
+              <li class="divider"></li>
+              <li class="menu-item">
+                <button class="btn-text" id="signout-btn">Sign out</button>
+              </li>
+            </ul>
+          </div>
+          <!-- guest -->
+          <button id="signin-btn" class="btn btn-outline hidden">
+            Sign in
+          </button>
+          <button id="signup-btn" class="btn btn-primary hidden">
+            Sign up
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="book-page">
+      <div id="toast" class="toast"></div>
+      <!-- details -->
+      <section class="book-details card-md">
+        <!-- img & availabilty badge -->
+        <div class="img-availability">
+          <img class="book-details-img" id="book-img" />
+          <span id="book-status"></span>
+        </div>
+
+        <!-- metadata & acitons -->
+        <div class="book-info">
+          <!-- metadata -->
+          <div class="book-meta">
+            <h3 id="book-title"></h3>
+            <div class="meta-row">
+              <span class="meta-label">ISBN</span>
+              <span class="meta-colon">:</span>
+              <span class="meta-value" id="book-isbn"></span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Author</span>
+              <span class="meta-colon">:</span>
+              <span class="meta-value" id="book-author"></span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Language</span>
+              <span class="meta-colon">:</span>
+              <span class="meta-value" id="book-language"></span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Pages</span>
+              <span class="meta-colon">:</span>
+              <span class="meta-value" id="book-pages"></span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Publisher</span>
+              <span class="meta-colon">:</span>
+              <span class="meta-value" id="book-publisher"></span>
+            </div>
+
+            <div class="meta-row">
+              <span class="meta-label">Published</span>
+              <span class="meta-colon">:</span>
+              <span class="meta-value" id="book-published"></span>
+            </div>
+          </div>
+
+          <!-- buttons -->
+          <div class="book-actions">
+            <button type="button" class="btn btn-outline" id="borrow-btn">
+              Borrow Book
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- description -->
+      <section class="book-description-card card-md">
+        <h4>Book Description</h4>
+        <span>_____</span>
+        <p id="book-description" class="description"></p>
+      </section>
+    </main>
+
+    <!-- script -->
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/app.js') }}"
+    ></script>
+  </body>
+</html>
