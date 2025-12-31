@@ -6,10 +6,9 @@ import traceback
 
 borrowings_routes = Blueprint("borrowings_routes", __name__)
 
-# Borrow book
 @borrowings_routes.route("/borrow", methods=["POST"])
 @signin_required
-def create_borrowing():
+def borrow_book():
     try:
         # user id
         user_id = g.current_user_id
@@ -25,9 +24,8 @@ def create_borrowing():
         borrowings.create_new_borrowing(
             user_id=user_id,
             book_id=data["book_id"],
-            due_at=datetime.now(timezone.utc) + timedelta(days=14)
+            due_at=datetime.now(timezone.utc) + timedelta(minutes=1)
         )
-
         # create activity if book successfully borrowed
         activities.create_activity(
             activity_type="BORROW_BOOK",
@@ -54,7 +52,6 @@ def create_borrowing():
             "msg": str(e)
         }), 500
 
-# Return book
 @borrowings_routes.route("/return/<int:borrowing_id>", methods=["PUT"])
 @signin_required
 def return_book(borrowing_id):
@@ -95,9 +92,8 @@ def return_book(borrowing_id):
         traceback.print_exc()
         return jsonify({"type": "error", "msg": str(e)}), 500
 
-# Get all
 @borrowings_routes.route("/all", methods=["GET"])
-def all_borrowings():
+def get_all_borrowings():
     try:
         service = borrowing_service(db)
         borrowings = service.get_all()
@@ -122,12 +118,11 @@ def all_borrowings():
         return jsonify({"type": "error", "msg": str(e)}), 500
 
 
-# Get active
 @borrowings_routes.route("/active", methods=["GET"])
-def active_borrowings():
+def get_active_borrowings():
     try:
         service = borrowing_service(db)
-        borrowings = service.get_active_borrowings()
+        borrowings = service.get_active()
         
         return jsonify([
             {
@@ -147,12 +142,11 @@ def active_borrowings():
     except Exception as e:
         return jsonify({"type": "error", "msg": str(e)}), 500
     
-# Get returned
 @borrowings_routes.route("/returned", methods=["GET"])
-def returned_borrowings():
+def get_returned_borrowings():
     try:
         service = borrowing_service(db)
-        borrowings = service.get_returned_borrowings()
+        borrowings = service.get_returned()
         
         return jsonify([
             {
@@ -169,24 +163,21 @@ def returned_borrowings():
     
     except ValueError as e:
         return jsonify({"type": "error", "msg": str(e)}), 400
-    
     except Exception as e:
         return jsonify({"type": "error", "msg": str(e)}), 500
-
-# Get overdue
+    
 @borrowings_routes.route("/overdue-borrowings")
-def overdue_borrowings():
+def get_overdue_borrowings():
     try:
         service = borrowing_service(db)
-        overdues = service.get_overdue_books()
+        overdues = service.get_overdue()
         return jsonify([b.to_json() for b in overdues]), 200
     
     except ValueError as e:
-        return jsonify({"Error": str(e)}), 400
+        return jsonify({"type": "error", "msg": str(e)}), 400
     except Exception as e:
-        return jsonify({"Error": str(e)}), 500
+        return jsonify({"type": "error", "msg": str(e)}), 500
 
-# Get by user
 @borrowings_routes.route("/<user_id>")
 def borrowings_by_user(user_id):
     try:
@@ -195,11 +186,10 @@ def borrowings_by_user(user_id):
         return jsonify([b.to_json() for b in borrowings]), 200
     
     except ValueError as e:
-        return jsonify({"Error": str(e)}), 400
+        return jsonify({"type": "error", "msg": str(e)}), 400
     except Exception as e:
-        return jsonify({"Error": str(e)}), 500
+        return jsonify({"type": "error", "msg": str(e)}), 500
 
-# Update borrowing due date
 @borrowings_routes.route("/update-borrowing-due-date", methods=["PUT"])
 def update_due_date():
     try:
@@ -216,6 +206,6 @@ def update_due_date():
         }), 200
     
     except ValueError as e:
-        return jsonify({"Error": str(e)}), 400
+        return jsonify({"type": "error", "msg": str(e)}), 400
     except Exception as e:
-        return jsonify({"Error": str(e)}), 500
+        return jsonify({"type": "error", "msg": str(e)}), 500

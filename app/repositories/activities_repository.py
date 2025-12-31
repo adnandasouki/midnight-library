@@ -12,9 +12,8 @@ class ActivitiesRepository:
             user_id=user_id,
             target_id=target_id
         )
+        self.db.session.add(new)      
         self.db.session.commit()
-
-        self.db.session.add(new)        
         return new
     
     # get all activities

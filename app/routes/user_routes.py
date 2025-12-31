@@ -13,7 +13,7 @@ def get_current_user():
     user = users.get_user_by_id(user_id)
     return jsonify(user.to_json())
 
-# Profile
+# Profile data
 @user_routes.route("/profile", methods=["GET"])
 @signin_required
 def profile():
@@ -24,7 +24,6 @@ def profile():
     
     borrowings = borrowing_service(db)
     all_borrowings = borrowings.get_borrowings_by_user(user_id)
-    active_borrowings = borrowings.get_active_by_user(user_id)
 
     return jsonify({
         "id": user.id,
@@ -39,20 +38,11 @@ def profile():
                 "author": b.book.author,
                 "borrowed_at": b.borrowed_at,
                 "due_at": b.due_at,
+                "returned_at": b.returned_at if b.returned_at else None,
                 "status": borrowings.get_borrowing_status(b.id)
             }
             for b in all_borrowings
-        ],
-        "active_borrowings": [
-            {
-                "id": b.id,
-                "book_id": b.book_id,
-                "title": b.book.title if b.book else None,
-                "borrowed_at": b.borrowed_at,
-                "due_at": b.due_at,
-            }
-            for b in active_borrowings
-        ],
+        ]
     }), 200
 
 # Create user with admin

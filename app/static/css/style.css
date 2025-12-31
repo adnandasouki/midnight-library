@@ -603,13 +603,13 @@ a {
   border-top: 1px solid #eee;
 }
 
+/* borrowings */
 .user-active-borrowings {
   max-width: 700px;
-  min-height: 300px;
+  min-height: 325px;
   padding: 1.5rem;
 }
 
-/* active borrowings table */
 .user-books {
   width: 100%;
   font-size: 14px;
@@ -650,6 +650,20 @@ a {
   text-overflow: ellipsis;
 }
 
+.active {
+  background-color: var(--color-success);
+  border-radius: var(--radius-pill);
+  padding: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.overdue {
+  background-color: rgb(215, 132, 132);
+  border-radius: var(--radius-pill);
+  padding: 0.3rem;
+  font-size: 0.8rem;
+}
+
 .user-books tbody tr:last-child {
   border-bottom: none;
 }
@@ -660,17 +674,17 @@ a {
 
 .user-books th:nth-child(1),
 .user-books td:nth-child(1) {
-  width: 7%; /* ID */
+  width: 5%; /* ID */
 }
 
 .user-books th:nth-child(2),
 .user-books td:nth-child(2) {
-  width: 43%; /* Title */
+  width: 30%; /* Title */
 }
 
 .user-books th:nth-child(3),
 .user-books td:nth-child(3) {
-  width: 20%; /* Borrowing Date */
+  width: 25%; /* Borrowing Date */
 }
 
 .user-books th:nth-child(4),
@@ -680,6 +694,11 @@ a {
 
 .user-books th:nth-child(5),
 .user-books td:nth-child(5) {
+  width: 15%; /* Action */
+}
+
+.user-books th:nth-child(6),
+.user-books td:nth-child(6) {
   width: 10%; /* Action */
 }
 

@@ -103,14 +103,18 @@ export const ProfileView = {
     this.joinedDate = document.getElementById("date-joined");
 
     // Active borrowings
-    this.container = document.getElementById("active-borrowings");
+    this.active = document.getElementById("active-borrowings");
+    this.history = document.getElementById("borrowings-history");
+
+    // Borrowings history
 
     if (
-      !this.container ||
+      !this.active ||
       !this.username ||
       !this.email ||
       !this.joinedDate ||
-      !this.avatar
+      !this.avatar ||
+      !this.history
     )
       return;
 
@@ -119,7 +123,7 @@ export const ProfileView = {
 
   bindEvents(onReturnClicked) {
     // Return Book
-    this.container.addEventListener("click", async (e) => {
+    this.active.addEventListener("click", async (e) => {
       const returnBtn = e.target.closest(".return-btn");
       if (!returnBtn) return;
 
@@ -140,12 +144,26 @@ export const ProfileView = {
     this.joinedDate.textContent = UI.toLocaleDateFormatter(profile.joined_date);
 
     // Active borrowings
-    this.renderActiveBorrowings(profile.active_borrowings);
+    const activeBorrowings = profile.all_borrowings.filter(
+      (b) => (b.status === "active") | (b.status === "overdue")
+    );
+
+    // Active borrowings
+    this.renderActiveBorrowings(activeBorrowings);
+
+    // History
+    const borrowingsHistory = profile.all_borrowings.filter(
+      (b) => b.status === "returned"
+    );
+
+    this.renderBorrowingsHistory(borrowingsHistory);
   },
 
+  // Active borrowings
   renderActiveBorrowings(activeBorrowingsList) {
-    this.container.innerHTML = "";
+    this.active.innerHTML = "";
 
+    if (!activeBorrowingsList) return;
     activeBorrowingsList.forEach((borrowing) => {
       const tr = `
       <tr>
@@ -153,6 +171,7 @@ export const ProfileView = {
         <td title="${borrowing.title}">${borrowing.title}</td>
         <td>${UI.formatDate(borrowing.borrowed_at)}</td>
         <td>${UI.formatDate(borrowing.due_at)}</td>
+        <td><span class="${borrowing.status}">${borrowing.status}</span></td>
         <td>
           <button
             class="return-btn btn-action"
@@ -161,7 +180,24 @@ export const ProfileView = {
         </td>
       </tr>
     `;
-      this.container.insertAdjacentHTML("beforeend", tr);
+      this.active.insertAdjacentHTML("beforeend", tr);
+    });
+  },
+
+  // Recent borrowings history
+  renderBorrowingsHistory(borrowingsHistory) {
+    this.history.innerHTML = "";
+
+    borrowingsHistory.slice(0, 5).forEach((borrowing) => {
+      const tr = `
+      <tr>
+        <td>${borrowing.book_id}</td>
+        <td title="${borrowing.title}">${borrowing.title}</td>
+        <td>${UI.formatDate(borrowing.borrowed_at)}</td>
+        <td>${UI.formatDate(borrowing.returned_at)}</td>
+      </tr>
+    `;
+      this.history.insertAdjacentHTML("beforeend", tr);
     });
   },
 };

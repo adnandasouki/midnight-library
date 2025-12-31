@@ -101,6 +101,7 @@ export const BookDetailsController = {
 export const ProfileController = {
   async init() {
     this.profile = await services.UserService.loadProfile();
+    console.log(this.profile);
 
     views.ProfileView.init({
       onReturnClicked: this.handleReturn.bind(this),
@@ -121,10 +122,19 @@ export const ProfileController = {
       // Reload profile
       const refreshedProfile = await services.UserService.loadProfile();
 
-      // Reload active borrowings
-      views.ProfileView.renderActiveBorrowings(
-        refreshedProfile.active_borrowings
+      const refreshedBorrowings = refreshedProfile.all_borrowings.filter(
+        (b) => (b.status === "active") | (b.status === "overdue")
       );
+
+      // Reload active borrowings
+      views.ProfileView.renderActiveBorrowings(refreshedBorrowings);
+
+      const refreshedHistory = refreshedProfile.all_borrowings.filter(
+        (b) => b.status === "returned"
+      );
+
+      // Reload history
+      views.ProfileView.renderBorrowingsHistory(refreshedHistory);
     } else if (response.status === 400) {
       // Show error toast notification
       utils.UI.showToast(data.msg, data.type);

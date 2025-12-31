@@ -97,7 +97,6 @@ def signin_required(fn):
                 algorithms=["HS256"],
                 issuer="lms-api"
             )
-        
             g.current_user_id = payload["user_id"]
         
         except ExpiredSignatureError:

@@ -83,10 +83,10 @@
         <span class="joined" id="date-joined"></span>
       </section>
 
-      <!-- active borrowings -->
+      <!-- borrowings -->
       <section class="user-active-borrowings card-md">
         <div class="table-header">
-          <h4 class="title">Active Borrowings</h4>
+          <h4 class="title">Borrowings</h4>
         </div>
         <!-- table -->
         <table class="user-books">
@@ -96,10 +96,31 @@
               <th>Title</th>
               <th>Borrowed Date</th>
               <th>Due Date</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody id="active-borrowings"></tbody>
+        </table>
+      </section>
+
+      <!-- borrowings history -->
+      <section class="user-active-borrowings card-md">
+        <div class="table-header">
+          <h4 class="title">History</h4>
+          <a class="borrowings-history-link" href="">View all</a>
+        </div>
+        <!-- table -->
+        <table class="user-books">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Borrowed Date</th>
+              <th>Returned Date</th>
+            </tr>
+          </thead>
+          <tbody id="borrowings-history"></tbody>
         </table>
       </section>
     </main>

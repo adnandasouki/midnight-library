@@ -5,12 +5,11 @@ class ActivityService:
         self.repo = repo
 
     def create_activity(self, activity_type, user_id, target_id=None):
-        new = self.repo.create(
+        return self.repo.create(
             activity_type=activity_type,
             user_id=user_id,
             target_id=target_id
         )
-        return new
 
     def get_all(self):
         return self.repo.all()

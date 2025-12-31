@@ -32,12 +32,12 @@ class BorrowingService:
             raise ValueError("No copies left")
         
         # Reaching borrowings limit
-        if self.borrowing_repo.is_limit_reached(user_id=user_id):
+        if self.borrowing_repo.limit_reached(user_id=user_id):
             raise ValueError("Borrowings limit reached")
         
         # Check if user has overdue
-        if self.borrowing_repo.user_has_overdue(user_id=user_id):
-            raise ValueError("Can't borrow a new book, overdue borrowings exists")
+        if self.borrowing_repo.has_overdue(user_id=user_id):
+            raise ValueError("Can't borrow a new book, overdue dates detected")
         
         # Check if book is borrowed by the same user
         if self.borrowing_repo.has_copy(user_id=user_id, book_id=book_id):
@@ -50,35 +50,32 @@ class BorrowingService:
         return self.borrowing_repo.all()
 
     # get active borrowings
-    def get_active_borrowings(self):
+    def get_active(self):
         return self.borrowing_repo.active()
     
     # get returned borrowings
-    def get_returned_borrowings(self):
+    def get_returned(self):
         return self.borrowing_repo.returned()
     
-    def get_overdue_books(self):
+    def get_overdue(self):
         return self.borrowing_repo.overdue()
     
     def get_borrowing_by_id(self, id):
         b = self.borrowing_repo.by_id(id=id)
         if not b:
             raise ValueError("Borrowing not found")
-        
         return b
     
     def get_active_by_user(self, id):
         user = self.user_repo.by_id(id)
         if not user:
             raise ValueError("User not found")
-        
         return self.borrowing_repo.active_by_user(id)
     
     def get_borrowings_by_user(self, user_id):
         user = self.user_repo.by_id(id=user_id)
         if not user:
             raise ValueError("User not found")
-        
         return self.borrowing_repo.by_user(user_id=user_id)
     
     def get_borrowing_status(self, borrowing_id):
@@ -88,30 +85,25 @@ class BorrowingService:
         
         if self.borrowing_repo.is_overdue(borrowing):
             return 'overdue'
-        
         if self.borrowing_repo.is_active(borrowing):
             return 'active'
-        
         return 'returned'
 
     def get_borrowings_by_book(self, book_id):
         book = self.book_repo.by_id(id=book_id)
         if not book:
             raise ValueError("Book not found")
-        
         return self.borrowing_repo.by_book(book_id=book_id)
     
     def check_overdue_borrowing(self, borrowing):
         return self.borrowing_repo.is_overdue(borrowing=borrowing)
-    
+        
     def check_borrowings_limit(self, user_id):
         user = self.user_repo.by_id(id=user_id)
         if not user:
             raise ValueError("User not found")
-        
         return self.borrowing_repo.is_limit_reached(user_id=user_id)
     
-    # Return book
     def return_borrowed_book(self, borrowing_id):
         return self.borrowing_repo.return_book(borrowing_id=borrowing_id)
     

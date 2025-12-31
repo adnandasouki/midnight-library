@@ -86,10 +86,6 @@ class Borrowing(db.Model):
     # json serializaiton
     def to_json(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
-    # overdue status
-    def is_overdue(self):
-        return self.returned_at is None and datetime.now(timezone.utc) > self.due_at
     
 class Activity(db.Model):
     __tablename__ = "activities"
