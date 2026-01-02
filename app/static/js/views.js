@@ -57,17 +57,23 @@ export const HomePageView = {
 ======================== */
 
 export const BookDetailsView = {
-  init({ onBorrowClick }) {
+  init({ onBorrowClick, onFavoriteClick }) {
     this.borrowBtn = document.getElementById("borrow-btn");
-    if (!this.borrowBtn) return;
+    this.favoriteBtn = document.getElementById("favorite-btn");
+    if (!this.borrowBtn || !this.favoriteBtn) return;
 
-    this.bindEvents(onBorrowClick);
+    this.bindEvents(onBorrowClick, onFavoriteClick);
   },
 
-  bindEvents(onBorrowClick) {
+  bindEvents(onBorrowClick, onFavoriteClick) {
     // Borrow Book
     this.borrowBtn.addEventListener("click", () => {
       onBorrowClick();
+    });
+
+    // Add to Favorites
+    this.favoriteBtn.addEventListener("click", () => {
+      onFavoriteClick();
     });
   },
 
@@ -93,7 +99,7 @@ export const BookDetailsView = {
 ======================== */
 
 export const ProfileView = {
-  init({ onReturnClicked }) {
+  init({ onReturnClicked, onRemoveFavoriteClicked }) {
     // Avatar
     this.avatar = document.getElementById("profile-avatar");
 
@@ -104,9 +110,12 @@ export const ProfileView = {
 
     // Active borrowings
     this.active = document.getElementById("active-borrowings");
-    this.history = document.getElementById("borrowings-history");
 
     // Borrowings history
+    this.history = document.getElementById("borrowings-history");
+
+    // Favorites
+    this.favorites = document.getElementById("favorites");
 
     if (
       !this.active ||
@@ -114,14 +123,15 @@ export const ProfileView = {
       !this.email ||
       !this.joinedDate ||
       !this.avatar ||
-      !this.history
+      !this.history ||
+      !this.favorites
     )
       return;
 
-    this.bindEvents(onReturnClicked);
+    this.bindEvents(onReturnClicked, onRemoveFavoriteClicked);
   },
 
-  bindEvents(onReturnClicked) {
+  bindEvents(onReturnClicked, onRemoveFavoriteClicked) {
     // Return Book
     this.active.addEventListener("click", async (e) => {
       const returnBtn = e.target.closest(".return-btn");
@@ -131,6 +141,17 @@ export const ProfileView = {
       if (!borrowingId) return;
 
       onReturnClicked(borrowingId);
+    });
+
+    // Remove favorite
+    this.favorites.addEventListener("click", (e) => {
+      const removeFavoriteBtn = e.target.closest(".remove-favorite-btn");
+      if (!removeFavoriteBtn) return;
+
+      const favoriteId = removeFavoriteBtn.dataset.removeFavoriteBtn;
+      if (!favoriteId) return;
+
+      onRemoveFavoriteClicked(favoriteId);
     });
   },
 
@@ -157,6 +178,9 @@ export const ProfileView = {
     );
 
     this.renderBorrowingsHistory(borrowingsHistory);
+
+    // Favorites
+    this.renderFavorites(profile.favorites);
   },
 
   // Active borrowings
@@ -175,8 +199,10 @@ export const ProfileView = {
         <td>
           <button
             class="return-btn btn-action"
-            data-borrowing-id="${borrowing.id}" 
-            type="button">Return</button>
+            data-borrowing-id="${borrowing.id}"
+            type="button">
+            Return
+          </button>
         </td>
       </tr>
     `;
@@ -198,6 +224,28 @@ export const ProfileView = {
       </tr>
     `;
       this.history.insertAdjacentHTML("beforeend", tr);
+    });
+  },
+
+  // Favorites
+  renderFavorites(favoritesList) {
+    this.favorites.innerHTML = "";
+
+    favoritesList.slice(0, 5).forEach((f) => {
+      const tr = `
+      <tr>
+        <td>${f.title}</td>
+        <td>
+          <button
+            class="remove-favorite-btn btn-action"
+            type="button"
+            data-remove-favorite-btn="${f.id}"
+            >Remove
+          </button>
+        </td>
+      </tr>
+    `;
+      this.favorites.insertAdjacentHTML("beforeend", tr);
     });
   },
 };

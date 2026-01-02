@@ -1,4 +1,4 @@
-from .dependencies.deps import user_service, token_required, borrowing_service, db
+from .dependencies.deps import user_service, token_required, borrowing_service, favorite_service, db
 from .dependencies.deps import admin_required, signin_required
 from flask import Blueprint, jsonify, request, g
 
@@ -25,6 +25,10 @@ def profile():
     borrowings = borrowing_service(db)
     all_borrowings = borrowings.get_borrowings_by_user(user_id)
 
+    fav = favorite_service(db)
+    favorites = fav.get_favorites_by_user(user_id)
+
+
     return jsonify({
         "id": user.id,
         "username": user.username,
@@ -42,6 +46,13 @@ def profile():
                 "status": borrowings.get_borrowing_status(b.id)
             }
             for b in all_borrowings
+        ],
+        "favorites": [
+            {
+                "id": f.id,
+                "title": f.book.title,
+            }
+            for f in favorites
         ]
     }), 200
 

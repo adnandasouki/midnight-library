@@ -43,12 +43,26 @@
             </button>
 
             <ul id="avatar-menu" class="avatar-menu">
-              <li class="menu-item">
-                <a href="/user/profile" class="btn-text" id="profile-btn"
-                  >Profile</a
+              <!-- admin links -->
+              <li class="menu-item hidden" id="overview-link">
+                <a href="/admin" class="btn-text">Overview</a>
+              </li>
+              <li class="menu-item hidden" id="manage-books-link">
+                <a href="/admin/manage-books" class="btn-text">Books</a>
+              </li>
+              <li class="menu-item hidden" id="manage-users-link">
+                <a href="/admin/manage-users" class="btn-text">Users</a>
+              </li>
+              <li class="menu-item hidden" id="manage-borrowings-link">
+                <a href="/admin/manage-borrowings" class="btn-text"
+                  >Borrowings</a
                 >
               </li>
-              <li class="menu-item">Settings</li>
+              <!-- user links -->
+              <li class="menu-item hidden" id="profile-link">
+                <a href="/user/profile" class="btn-text">Profile</a>
+              </li>
+              <li class="menu-item hidden" id="settings-link">Settings</li>
               <li class="divider"></li>
               <li class="menu-item">
                 <button class="btn-text" id="signout-btn">Sign out</button>
@@ -121,6 +135,24 @@
             </tr>
           </thead>
           <tbody id="borrowings-history"></tbody>
+        </table>
+      </section>
+
+      <!-- favorites -->
+      <section class="user-active-borrowings card-md">
+        <div class="table-header">
+          <h4 class="title">Favorites</h4>
+          <a class="favorites-link" href="">View all</a>
+        </div>
+        <!-- table -->
+        <table class="user-books favorites">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="favorites"></tbody>
         </table>
       </section>
     </main>

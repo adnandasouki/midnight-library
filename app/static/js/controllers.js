@@ -66,6 +66,7 @@ export const BookDetailsController = {
 
     views.BookDetailsView.init({
       onBorrowClick: this.handleBorrow.bind(this),
+      onFavoriteClick: this.handleFavorite.bind(this),
     });
 
     views.BookDetailsView.renderBook(this.book);
@@ -92,6 +93,28 @@ export const BookDetailsController = {
       utils.UI.showToast(data.msg, data.type);
     }
   },
+
+  async handleFavorite() {
+    /* Not registered */
+    if (!this.token) {
+      utils.UI.showToast("Account is required to borrow books", "error");
+      return;
+    }
+
+    /* Registered */
+
+    // Add to favorites request
+    const { response, data } = await services.Favorites.createFavorite(
+      this.book.id
+    );
+    if (response.status === 201) {
+      utils.UI.showToast(data.msg, data.type);
+    } else if (response.status === 409) {
+      utils.UI.showToast(data.msg, data.type);
+    } else if (response.status === 401) {
+      utils.UI.showToast(data.msg, data.type);
+    }
+  },
 };
 
 /* ========================
@@ -101,10 +124,10 @@ export const BookDetailsController = {
 export const ProfileController = {
   async init() {
     this.profile = await services.UserService.loadProfile();
-    console.log(this.profile);
 
     views.ProfileView.init({
       onReturnClicked: this.handleReturn.bind(this),
+      onRemoveFavoriteClicked: this.handleRemoveFavorite.bind(this),
     });
 
     views.ProfileView.render(this.profile);
@@ -135,6 +158,27 @@ export const ProfileController = {
 
       // Reload history
       views.ProfileView.renderBorrowingsHistory(refreshedHistory);
+    } else if (response.status === 400) {
+      // Show error toast notification
+      utils.UI.showToast(data.msg, data.type);
+    }
+  },
+
+  async handleRemoveFavorite(favId) {
+    const { response, data } = await services.Api.request("/favorites/delete", {
+      method: "DELETE",
+      body: JSON.stringify({ fav_id: favId }),
+    });
+
+    if (response.status === 200) {
+      // Show success toast notification
+      utils.UI.showToast(data.msg, data.type);
+
+      // Reload profile
+      const refreshedProfile = await services.UserService.loadProfile();
+
+      // Reload profile
+      views.ProfileView.renderFavorites(refreshedProfile.favorites);
     } else if (response.status === 400) {
       // Show error toast notification
       utils.UI.showToast(data.msg, data.type);

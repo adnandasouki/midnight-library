@@ -321,3 +321,45 @@ export const ActivityService = {
     return data;
   },
 };
+
+/* ========================
+   FAVORITES
+======================== */
+
+export const Favorites = {
+  async createFavorite(bookId) {
+    const { response, data } = await Api.request("/favorites/create", {
+      method: "POST",
+      body: JSON.stringify({ book_id: bookId }),
+    });
+    if (!response.ok) return;
+    return { response, data };
+  },
+
+  async loadAllFavorites() {
+    const { response, data } = await Api.request("/favorites/all", {
+      method: "GET",
+    });
+    if (!response.ok) return [];
+    return data;
+  },
+
+  async loadFavoritesByUser() {
+    const { response, data } = await Api.request("/favorites/user", {
+      method: "GET",
+    });
+    if (!response.ok) return [];
+    return data;
+  },
+
+  async deleteFavorite(favId) {
+    const { response, data } = await Api.request("/favorites/delete", {
+      method: "DELETE",
+      body: {
+        fav_id: favId,
+      },
+    });
+    if (!response.ok) return;
+    return { response, data };
+  },
+};

@@ -702,6 +702,16 @@ a {
   width: 10%; /* Action */
 }
 
+.user-books.favorites th:nth-child(1),
+.user-books td:nth-child(1) {
+  width: 85%;
+}
+
+.user-books.favorites th:nth-child(2),
+.user-books td:nth-child(2) {
+  width: 15%;
+}
+
 /* ========================
    MANAGE BOOKS
 ======================== */

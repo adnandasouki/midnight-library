@@ -6,10 +6,12 @@ import jwt
 from ...extentions import db
 from app.repositories.borrowings_repository import BorrowingsRepository
 from app.repositories.activities_repository import ActivitiesRepository
+from app.repositories.favorites_repository import FavoritesRepository
 from app.repositories.books_repository import BooksRepository
 from app.repositories.users_repository import UsersRepository
 from app.services.borrowing_service import BorrowingService
 from app.services.activity_service import ActivityService
+from app.services.favorite_service import FavoriteService
 from app.services.book_service import BookService
 from app.services.user_service import UserService
 
@@ -34,6 +36,17 @@ def borrowing_service(db):
 def activity_service(db):
     repo = ActivitiesRepository(db)
     service = ActivityService(repo)
+    return service
+
+def favorite_service(db):
+    favorites_repo = FavoritesRepository(db)
+    users_repo = UsersRepository(db)
+    books_repo = BooksRepository(db)
+    service = FavoriteService(
+        favorites_repo=favorites_repo,
+        users_repo=users_repo,
+        books_repo=books_repo
+    )
     return service
 
 def token_required(fn):
