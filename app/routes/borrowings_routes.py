@@ -100,15 +100,15 @@ def get_all_borrowings():
 
         return jsonify([
             {
-                "id": borrowing.id,
-                "user": borrowing.user.username,
-                "book": borrowing.book.title,
-                "borrowed_at": borrowing.borrowed_at,
-                "due_at": borrowing.due_at,
-                "status": "Active" if borrowing.returned_at is None else "Returned",
-                "returned_at": borrowing.returned_at if borrowing.returned_at else None
+                "id": b.id,
+                "user": b.user.username,
+                "book": b.book.title,
+                "borrowed_at": b.borrowed_at,
+                "due_at": b.due_at,
+                "status": service.get_borrowing_status(b.id),
+                "returned_at": b.returned_at if b.returned_at else None
             }
-            for borrowing in borrowings
+            for b in borrowings
         ]), 200
     
     except ValueError as e:

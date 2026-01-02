@@ -261,22 +261,53 @@ export const AdminView = {
     this.booksCount = document.getElementById("books-count");
     this.recentActivityContainer = document.getElementById("recent-activity");
 
+    // attention required items
+    this.overdueAttentionCount = document.getElementById(
+      "overdue-attention-count"
+    );
+    this.stockAttentionCount = document.getElementById("stock-attention-count");
+
     if (
       !this.usersCount ||
       !this.booksCount ||
       !this.borrowingsCount ||
-      !this.recentActivityContainer
+      !this.recentActivityContainer ||
+      !this.overdueAttentionCount ||
+      !this.stockAttentionCount
     )
       return;
   },
 
   // render admin overview page
   render({ users, books, borrowings, activities }) {
+    // attention required
+    const overdues = borrowings.filter((b) => b.status === "overdue");
+    if (overdues.length > 0) {
+      document.getElementById("overdue-link").classList.remove("hidden");
+      this.overdueAttentionCount.textContent = overdues.length;
+    }
+
+    const outOfStockBooks = books.filter((b) => b.total_copies === 0);
+    if (outOfStockBooks.length > 0) {
+      document.getElementById("stock-link").classList.remove("hidden");
+      this.stockAttentionCount.textContent = outOfStockBooks.length;
+    }
+
+    // indicators
     this.borrowingsCount.textContent = `${borrowings.length}`;
     this.usersCount.textContent = `${users.length}`;
     this.booksCount.textContent = `${books.length}`;
 
+    // recent activity
     this.renderRecentActivity(activities);
+  },
+
+  showAttention(attention) {
+    attention.classList.remove("hidden");
+  },
+
+  hideAttention(attention) {
+    attention.classList.add("hidden");
   },
 
   // render recent activity list

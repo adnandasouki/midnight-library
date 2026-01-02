@@ -27,7 +27,7 @@ class ActivityService:
         
         return self.repo.by_limit(limit=limit)
     
-    def get_latest_by_limit(self, limit=5):
+    def get_latest_by_limit(self, limit=6):
         if limit < 0:
             raise ValueError("Limit cannot be negative")
 

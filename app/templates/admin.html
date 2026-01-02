@@ -82,6 +82,31 @@
 
     <!-- main content -->
     <main class="admin-page">
+      <!-- REQUIRED ATTENTION -->
+      <section class="attention-required">
+        <!-- overdue -->
+        <a href="/admin/manage-borrowings" id="overdue-link" class="hidden">
+          <div class="attention-item overdue-attention card-sm">
+            <div class="attention-title">
+              <img src="/static/assets/icons/alarm.svg" alt="overdue" />
+              <span>Overdue Borrowings</span>
+            </div>
+            <span id="overdue-attention-count" class="attention-count"></span>
+          </div>
+        </a>
+
+        <!-- out of stock -->
+        <a href="/admin/manage-books" id="stock-link" class="hidden">
+          <div class="attention-item stock-attention card-sm">
+            <div class="attention-title">
+              <img src="/static/assets/icons/stock.svg" alt="overdue" />
+              <span>Out of Stock Books</span>
+            </div>
+            <span id="stock-attention-count" class="attention-count"></span>
+          </div>
+        </a>
+      </section>
+
       <!-- INDICATORS -->
       <section class="overview">
         <!-- users -->
