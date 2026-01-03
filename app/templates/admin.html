@@ -18,20 +18,18 @@
   <body>
     <!-- navbar -->
     <nav class="navbar">
-      <!-- brand -->
       <div class="navbar-wrapper">
-        <a href="/">
-          <div class="navbar-brand">
-            <img
-              src="{{ url_for('static', filename='assets/brand.svg') }}"
-              alt="brand"
-            />
-            <span>Library System</span>
-          </div>
+        <!-- brand -->
+        <a href="/" class="navbar-brand">
+          <img
+            src="{{ url_for('static', filename='assets/brand.svg') }}"
+            alt="brand"
+          />
+          <span>Library System</span>
         </a>
 
+        <!-- avatar -->
         <div class="navbar-buttons" id="auth-buttons">
-          <!-- user -->
           <div class="avatar-dropdown hidden" id="avatar-dropdown">
             <button
               id="avatar-nav-btn"
@@ -42,30 +40,98 @@
               <span id="avatar-letter"></span>
             </button>
 
-            <ul id="avatar-menu" class="avatar-menu">
-              <!-- admin links -->
-              <li class="menu-item hidden" id="overview-link">
-                <a href="/admin" class="btn-text">Overview</a>
+            <ul id="avatar-menu" class="avatar-menu" role="menu">
+              <!-- admin -->
+              <li class="menu-item hidden" id="overview-link" role="menuitem">
+                <a href="/admin" class="btn-text">
+                  <img
+                    src="{{ url_for('static', filename='assets/icons/overview.png') }}"
+                    alt="profile"
+                    width="20px"
+                    height="20px"
+                  />
+                  <span>Overview</span>
+                </a>
               </li>
-              <li class="menu-item hidden" id="manage-books-link">
-                <a href="/admin/manage-books" class="btn-text">Books</a>
+              <li
+                class="menu-item hidden"
+                id="manage-books-link"
+                role="menuitem"
+              >
+                <a href="/admin/manage-books" class="btn-text">
+                  <img
+                    src="{{ url_for('static', filename='assets/icons/books.png') }}"
+                    alt="profile"
+                    width="20px"
+                    height="20px"
+                  />
+                  <span>Books</span>
+                </a>
               </li>
-              <li class="menu-item hidden" id="manage-users-link">
-                <a href="/admin/manage-users" class="btn-text">Users</a>
+              <li
+                class="menu-item hidden"
+                id="manage-users-link"
+                role="menuitem"
+              >
+                <a href="/admin/manage-users" class="btn-text">
+                  <img
+                    src="{{ url_for('static', filename='assets/icons/users.png') }}"
+                    alt="profile"
+                    width="20px"
+                    height="20px"
+                  />
+                  <span>Users</span>
+                </a>
               </li>
-              <li class="menu-item hidden" id="manage-borrowings-link">
-                <a href="/admin/manage-borrowings" class="btn-text"
-                  >Borrowings</a
+              <li
+                class="menu-item hidden"
+                id="manage-borrowings-link"
+                role="menuitem"
+              >
+                <a href="/admin/manage-borrowings" class="btn-text">
+                  <img
+                    src="{{ url_for('static', filename='assets/icons/borrowings.png') }}"
+                    alt="profile"
+                    width="20px"
+                    height="20px"
+                  />
+                  <span>Borrowings</span></a
                 >
               </li>
-              <!-- user links -->
-              <li class="menu-item hidden" id="profile-link">
-                <a href="/user/profile" class="btn-text">Profile</a>
+              <!-- user -->
+              <li class="menu-item hidden" id="profile-link" role="menuitem">
+                <a href="/user/profile" class="btn-text">
+                  <img
+                    src="{{ url_for('static', filename='assets/icons/profile.png') }}"
+                    alt="profile"
+                    width="20px"
+                    height="20px"
+                  />
+                  <span>Profile</span>
+                </a>
               </li>
-              <li class="menu-item hidden" id="settings-link">Settings</li>
-              <li class="divider"></li>
-              <li class="menu-item">
-                <button class="btn-text" id="signout-btn">Sign out</button>
+              <li class="menu-item hidden" id="settings-link" role="menuitem">
+                <a href="/user/settings" class="btn-text">
+                  <img
+                    src="{{ url_for('static', filename='assets/icons/settings.png') }}"
+                    alt="profile"
+                    width="20px"
+                    height="20px"
+                  />
+                  <span>Settings</span>
+                </a>
+              </li>
+              <li class="divider" role="separator"></li>
+              <li class="menu-item" role="menuitem">
+                <button class="btn-text" id="signout-btn">
+                  <img
+                    src="{{ url_for('static', filename='assets/icons/signout.png') }}"
+                    alt="profile"
+                    width="20px"
+                    height="20px"
+                  />
+                  <span>Sign out</span>
+                </button>
               </li>
             </ul>
           </div>
