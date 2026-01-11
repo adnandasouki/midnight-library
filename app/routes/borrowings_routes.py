@@ -1,8 +1,9 @@
-from .dependencies.deps import borrowing_service, signin_required, activity_service, user_service, book_service
-from datetime import datetime, timezone, timedelta
 from flask import Blueprint, jsonify, request, g
-from ..extentions import db
+from datetime import datetime, timezone, timedelta
 import traceback
+
+from .dependencies.deps import borrowing_service, signin_required, activity_service
+from ..extentions import db
 
 borrowings_routes = Blueprint("borrowings_routes", __name__)
 
@@ -24,8 +25,9 @@ def borrow_book():
         borrowings.create_new_borrowing(
             user_id=user_id,
             book_id=data["book_id"],
-            due_at=datetime.now(timezone.utc) + timedelta(minutes=1)
+            due_at=datetime.now(timezone.utc) + timedelta(days=1)
         )
+        
         # create activity if book successfully borrowed
         activities.create_activity(
             activity_type="BORROW_BOOK",
@@ -39,11 +41,10 @@ def borrow_book():
         }), 201
     
     except ValueError as e:
-        traceback.print_exc()
         return jsonify({
             "type": "error",
             "msg": str(e)
-        }), 409
+        }), 400
     
     except Exception as e:
         traceback.print_exc()

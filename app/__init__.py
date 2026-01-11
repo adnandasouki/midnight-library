@@ -1,7 +1,7 @@
 from flask import Flask
 
 from .extentions import db, migrate, bcrypt
-from .models import *
+from .models import User, Book, Borrowing, Activity, Favorite
 
 from .routes.borrowings_routes import borrowings_routes
 from .routes.activities_routes import activities_routes
@@ -12,15 +12,15 @@ from .routes.auth_routes import auth_routes
 from .routes.admin_routes import admin
 from .routes.main_routes import main
 
-def create_app(config_name="config.Config"):
+def create_app():
     app = Flask(__name__)
-    app.config.from_object(config_name)
+
+    app.config.from_object("config.Config")
 
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
-    # login_manager.init_app(app)
-
+    
     app.register_blueprint(main)
     app.register_blueprint(admin, url_prefix="/admin")
     app.register_blueprint(auth_routes, url_prefix="/api/auth")

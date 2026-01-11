@@ -98,6 +98,28 @@ class UserService:
         
         return self.repo.update(user_id=user_id, updates=updates)
     
+    def update_password(self, user_id, current_pass, new_pass, confirm_pass):
+        user = self.repo.by_id(user_id)
+        if not user:
+            raise ValueError("User not found")
+
+        if current_pass and new_pass and confirm_pass:
+            if not check_password_hash(user.password, current_pass):
+                raise ValueError("Invalid password for the user")
+            
+            if new_pass != confirm_pass:
+                raise ValueError("Unmatched passwords")
+        else:
+            raise ValueError("Password cannot be empty")
+        
+        # if passed hash and update password
+        hashed = generate_password_hash(new_pass)
+
+        return self.repo.update(
+            user_id=user_id,
+            updates={"password": hashed}
+        )
+
     # delete by id
     def delete_user_by_id(self, id):
         user = self.repo.by_id(id)
@@ -121,7 +143,7 @@ class UserService:
 
         # check if exist
         if not user:
-            raise ValueError(f"No account found for user '{username_or_email}'")
+            raise ValueError(f"No account found for user: {username_or_email}")
         
         # check password for username
         if not check_password_hash(user.password, password):

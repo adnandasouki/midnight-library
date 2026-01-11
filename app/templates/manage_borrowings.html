@@ -16,153 +16,41 @@
     />
   </head>
   <body>
-    <!-- navbar -->
-    <nav class="navbar">
-      <div class="navbar-wrapper">
-        <!-- brand -->
-        <a href="/" class="navbar-brand">
-          <img
-            src="{{ url_for('static', filename='assets/brand.svg') }}"
-            alt="brand"
-          />
-          <span>Library System</span>
-        </a>
-
-        <!-- avatar -->
-        <div class="navbar-buttons" id="auth-buttons">
-          <div class="avatar-dropdown hidden" id="avatar-dropdown">
-            <button
-              id="avatar-nav-btn"
-              class="avatar-sm"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span id="avatar-letter"></span>
-            </button>
-
-            <ul id="avatar-menu" class="avatar-menu" role="menu">
-              <!-- admin -->
-              <li class="menu-item hidden" id="overview-link" role="menuitem">
-                <a href="/admin" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/overview.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Overview</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-books-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-books" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/books.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Books</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-users-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-users" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/users.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Users</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-borrowings-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-borrowings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/borrowings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Borrowings</span></a
-                >
-              </li>
-              <!-- user -->
-              <li class="menu-item hidden" id="profile-link" role="menuitem">
-                <a href="/user/profile" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/profile.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Profile</span>
-                </a>
-              </li>
-              <li class="menu-item hidden" id="settings-link" role="menuitem">
-                <a href="/user/settings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/settings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Settings</span>
-                </a>
-              </li>
-              <li class="divider" role="separator"></li>
-              <li class="menu-item" role="menuitem">
-                <button class="btn-text" id="signout-btn">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/signout.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Sign out</span>
-                </button>
-              </li>
-            </ul>
-          </div>
-          <!-- guest -->
-          <button id="signin-btn" class="btn btn-outline hidden">
-            Sign in
-          </button>
-          <button id="signup-btn" class="btn btn-primary hidden">
-            Sign up
-          </button>
-        </div>
-      </div>
-    </nav>
+    {% include "partials/_navbar.html" %}
 
     <!-- main content -->
     <main class="manage-page">
       <div id="toast" class="toast"></div>
-      <section class="manage-borrowings-card card-md">
+      <section class="manage-section card-md">
         <!-- header -->
         <header class="table-header">
           <div class="header-title">
+            <!-- title -->
             <h4 class="table-title">Borrowings</h4>
+            <!-- search bar -->
+            <div class="search-books table">
+              <span class="search-icon">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
 
-            <input
-              type="text"
-              id="search-borrowings-field"
-              class="field-search-table"
-              placeholder="search for user, book"
-              name="search"
-            />
+              <input
+                id="search-field"
+                class="search-input"
+                type="input"
+                placeholder="Search for a borrowings..."
+              />
 
+              <button
+                id="clear-search"
+                class="clear-search-btn hidden"
+                type="button"
+                aria-label="Clear search"
+              >
+                <i class="fas fa-times-circle fa-lg"></i>
+              </button>
+            </div>
+
+            <!-- filters -->
             <select id="borrowings-filters" class="filters-menu">
               <option value="all">All</option>
               <option value="active">Active</option>
@@ -171,8 +59,18 @@
             </select>
           </div>
         </header>
+
         <!-- table -->
-        <table class="manage-borrowings-table">
+        <table class="manage-books-table borrowings">
+          <colgroup>
+            <col style="width: 15%" />
+            <col style="width: 35%" />
+            <col style="width: 8%" />
+            <col style="width: 8%" />
+            <col style="width: 8%" />
+            <col style="width: 8%" />
+            <col style="width: 10%" />
+          </colgroup>
           <thead>
             <tr>
               <th>User</th>
@@ -181,7 +79,7 @@
               <th>Due at</th>
               <th>Status</th>
               <th>Returned at</th>
-              <th>Action</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="manage-borrowings-data"></tbody>
@@ -190,6 +88,10 @@
     </main>
 
     <!-- script -->
+    <script
+      src="https://kit.fontawesome.com/0fa7007e9e.js"
+      crossorigin="anonymous"
+    ></script>
     <script
       type="module"
       src="{{ url_for('static', filename='js/app.js') }}"

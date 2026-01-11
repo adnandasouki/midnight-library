@@ -1,0 +1,87 @@
+<nav class="navbar">
+  <div class="navbar-wrapper">
+    <div class="leading">
+      <a href="/" class="navbar-brand">
+        <img
+          src="{{ url_for('static', filename='assets/logos/brand.png') }}"
+          alt="brand"
+        />
+        <span>Midnight Library</span>
+      </a>
+
+      <ul>
+        <a href="/">
+          <li>Home</li>
+        </a>
+
+        <a href="/browse?q=&page=1">
+          <li>Books</li>
+        </a>
+      </ul>
+    </div>
+
+    <div class="navbar-buttons" id="auth-buttons">
+      <div class="avatar-dropdown hidden" id="avatar-dropdown">
+        <button
+          id="avatar-nav-btn"
+          class="avatar-sm"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <span id="avatar-letter"></span>
+        </button>
+
+        <ul id="avatar-menu" class="avatar-menu" role="menu">
+          <!-- admin -->
+          <li class="menu-item hidden" id="overview-link" role="menuitem">
+            <a href="/admin" class="btn-text">
+              <i class="fa-solid fa-chart-line"></i>
+              <span>Overview</span>
+            </a>
+          </li>
+          <li class="menu-item hidden" id="manage-books-link" role="menuitem">
+            <a href="/admin/manage-books" class="btn-text">
+              <i class="fa-solid fa-book"></i>
+              <span>Books</span>
+            </a>
+          </li>
+          <li class="menu-item hidden" id="manage-users-link" role="menuitem">
+            <a href="/admin/manage-users" class="btn-text">
+              <i class="fa-solid fa-users"></i>
+              <span>Users</span>
+            </a>
+          </li>
+          <li
+            class="menu-item hidden"
+            id="manage-borrowings-link"
+            role="menuitem"
+          >
+            <a href="/admin/manage-borrowings" class="btn-text">
+              <i class="fa-solid fa-calendar-days"></i>
+              <span>Borrowings</span></a
+            >
+          </li>
+          <!-- user -->
+          <li class="menu-item hidden" id="profile-link" role="menuitem">
+            <a href="/user/profile" class="btn-text">
+              <i class="fa-solid fa-user"></i>
+              <span>Profile</span>
+            </a>
+          </li>
+
+          <li class="divider" role="separator"></li>
+
+          <li class="menu-item" role="menuitem">
+            <button class="btn-text" id="signout-btn">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Sign out</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <!-- guest -->
+      <button id="signin-btn" class="btn btn-outline hidden">Sign in</button>
+      <button id="signup-btn" class="btn btn-primary hidden">Sign up</button>
+    </div>
+  </div>
+</nav>

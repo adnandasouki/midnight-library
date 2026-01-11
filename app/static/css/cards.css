@@ -1,0 +1,27 @@
+/* ========================
+   CARDS
+======================== */
+
+.card-lg {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-lg);
+}
+
+.card-md {
+  background-color: white;
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-sm {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-sm);
+}
+
+.form-card {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-sm);
+}

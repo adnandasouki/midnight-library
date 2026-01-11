@@ -14,7 +14,6 @@ class BorrowingService:
         self.user_repo = user_repo
         self.book_repo = book_repo
 
-    # Borrow book
     def create_new_borrowing(self, user_id, book_id, due_at):
         user = self.user_repo.by_id(id=user_id)
         book = self.book_repo.by_id(id=book_id)
@@ -45,15 +44,12 @@ class BorrowingService:
         
         return self.borrowing_repo.create(user_id=user_id, book_id=book_id, due_at=due_at)
         
-    # get all borrowings
     def get_all(self):
         return self.borrowing_repo.all()
 
-    # get active borrowings
     def get_active(self):
         return self.borrowing_repo.active()
     
-    # get returned borrowings
     def get_returned(self):
         return self.borrowing_repo.returned()
     

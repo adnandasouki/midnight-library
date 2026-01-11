@@ -1,13 +1,13 @@
-from .dependencies.deps import favorite_service, signin_required, db
 from flask import Blueprint, request, g, jsonify
 from traceback import print_exc
+
+from .dependencies.deps import favorite_service, signin_required, db
 
 favorites_routes = Blueprint("favorites_routes", __name__)
 
 @favorites_routes.route("/create", methods=["POST"])
 @signin_required
 def create_favorite():
-    print("############")
     try:
         book_id = request.json.get("book_id")
         user_id = g.current_user_id

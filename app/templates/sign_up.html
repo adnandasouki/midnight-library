@@ -16,23 +16,32 @@
     />
   </head>
   <body>
+    <!-- main content -->
     <main class="auth-page">
       <section class="auth-card card-md">
-        <!-- LOCAL SIGN UP -->
+        <!-- form -->
         <form id="signup-form" class="auth-form">
+          <!-- header -->
           <header class="auth-header">
+            <!-- brand -->
             <a href="/">
-              <div class="navbar-brand">
+              <div class="form-brand">
                 <img
-                  src="{{ url_for('static', filename='assets/brand.svg') }}"
+                  src="{{ url_for('static', filename='assets/logos/brand.png') }}"
                   alt="brand"
                 />
                 <span>Library System</span>
               </div>
             </a>
-            <h3>Sign Up</h3>
-            <p>Create a new account</p>
+            <!-- texts -->
+
+            <div class="form-header-texts">
+              <h3>Sign Up</h3>
+              <p>Create a new account</p>
+            </div>
           </header>
+
+          <div class="error hidden"></div>
 
           <div class="auth-fields">
             <input
@@ -62,7 +71,8 @@
 
           <!-- submit -->
           <button type="submit" class="btn btn-primary btn-full">
-            Create Account
+            <span class="submit-text">Create Account</span>
+            <span class="spinner hidden"></span>
           </button>
         </form>
 
@@ -84,12 +94,15 @@
         <!-- GOOGLE AUTH -->
         <div class="oauth-section">
           <button id="oauth-google" class="btn btn-outline" type="button">
-            <img
-              src="/static/assets/google-icon.svg"
-              class="btn-icon"
-              alt="Google"
-            />
-            <span>Continue with Google</span>
+            <span class="spinner google hidden"></span>
+            <div class="oauth-btn-content">
+              <img
+                src="/static/assets/logos/google.svg"
+                class="btn-icon"
+                alt="Google"
+              />
+              <span>Sign in with Google</span>
+            </div>
           </button>
         </div>
 

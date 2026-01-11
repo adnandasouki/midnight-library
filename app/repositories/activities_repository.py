@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from flask_sqlalchemy import SQLAlchemy
+
 from ..models import Activity
 
 class ActivitiesRepository:
@@ -16,7 +17,6 @@ class ActivitiesRepository:
         self.db.session.commit()
         return new
     
-    # get all activities
     def all(self):
         return (
             Activity.query
@@ -24,11 +24,9 @@ class ActivitiesRepository:
             .all()
         )
     
-    # get acitivity by id
     def by_id(self, id):
         return Activity.query.get(id)
     
-    # get activities by a specific limit
     def by_limit(self, limit):
         return (
             Activity.query

@@ -1,0 +1,113 @@
+/* ========================
+   BROWSE
+======================== */
+
+.browse-content {
+  min-height: 1000px;
+  width: 100%;
+}
+
+.books-section {
+  padding: 4rem 1rem 6rem 1rem;
+  width: 75%;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.counters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: var(--color-midnight-primary-soft);
+  opacity: 0.9;
+}
+
+.counter {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--color-midnight-primary);
+}
+
+.browse-hero {
+  width: 100%;
+  min-height: 200px;
+
+  background-color: var(--color-midnight-primary-soft);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* empty state */
+
+.empty-state-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state img {
+  width: 150px;
+}
+
+/* paginaiton */
+/* pagination */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pagination button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  color: var(--color-midnight-accent);
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+
+  transition: background-color 0.15s ease;
+}
+
+.links {
+  display: flex;
+}
+
+.link:hover {
+  background-color: var(--color-midnight-accent);
+  color: white;
+}
+
+.pagination-btn {
+  transition: opacity 0.15s ease;
+}
+
+.pagination-btn:hover {
+  background-color: var(--color-midnight-accent-strong);
+  color: white;
+}
+
+.pagination-btn:disabled {
+  pointer-events: none;
+  opacity: 0;
+}

@@ -99,10 +99,12 @@ export const Url = {
 
   set(params) {
     const url = new URL(window.location);
+
     Object.entries(params).forEach(([key, value]) => {
       if (!value) url.searchParams.delete(key);
       else url.searchParams.set(key, value);
     });
+
     window.history.pushState({}, "", url);
   },
 };

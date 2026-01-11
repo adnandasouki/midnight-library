@@ -1,6 +1,7 @@
-from .dependencies.deps import activity_service, db
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 import traceback
+
+from .dependencies.deps import activity_service, db
 
 activities_routes = Blueprint("activities_routes", __name__)
 

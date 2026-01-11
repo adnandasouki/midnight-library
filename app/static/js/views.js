@@ -5,43 +5,42 @@ import { UI } from "./utils.js";
 ======================== */
 
 export const HomePageView = {
-  init({ onSearch, onClearSearch }) {
-    this.container = document.getElementById("books");
-    this.searchInput = document.getElementById("search-field");
-    this.clearSearch = document.getElementById("clear-search");
+  init({ books, onSubmit }) {
+    this.featuredBooks = document.getElementById("featured-books");
+    this.searchForm = document.getElementById("home-search-form");
+    this.searchInput = document.getElementById("home-search-input");
 
-    if (!this.container || !this.searchInput || !this.clearSearch) return;
+    if (!this.searchInput || !this.searchForm || !this.featuredBooks) return;
 
-    this.bindEvents(onSearch, onClearSearch);
+    this.bindEvents(onSubmit);
+    this.render(books);
   },
 
-  bindEvents(onSearch, onClearSearch) {
-    // Search
-    this.searchInput.addEventListener("input", () => {
-      const search = this.searchInput.value.trim();
-      onSearch(search);
+  render(books) {
+    this.renderFeaturedBooks(books);
+  },
+
+  bindEvents(onSubmit) {
+    this.searchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const q = this.searchInput.value.trim();
+      if (!q) return;
+
+      onSubmit(q);
     });
-
-    // Clear search
-    this.clearSearch.addEventListener("click", () => {
-      onClearSearch();
-    });
   },
 
-  setSearchValue(value) {
-    this.searchInput.value = value || "";
-  },
+  renderFeaturedBooks(books) {
+    this.featuredBooks.innerHTML = "";
 
-  renderBooks(books) {
-    this.container.innerHTML = "";
-
-    books.forEach((b) => {
-      this.container.insertAdjacentHTML(
+    books.slice(0, 5).forEach((b) => {
+      this.featuredBooks.insertAdjacentHTML(
         "beforeend",
         `
           <a href="/books/${b.id}">
-            <div class="book-container card-sm">
-              <img class="book-img" src="/static/assets/images/${b.book_img}"></img>
+            <div class="book-container">
+              <img class="book-img" src="/static/assets/books/${b.book_img}"></img>
               <h3 class="book-title">${b.title}</h3>
               <p class="book-author">${b.author}</p>
             </div>
@@ -78,11 +77,22 @@ export const BookDetailsView = {
   },
 
   renderBook(book) {
+    console.log(book);
+    let status = book.total_copies > 0 ? "available" : "unavailable";
+
+    document.getElementById("by-author").textContent = book.author;
+
+    document.getElementById("published").textContent = book.published_at;
+
+    document.getElementById("book-subtitle").textContent = book.subtitle;
+    console.log(book.subtitle);
+
     document.getElementById(
       "book-img"
-    ).src = `/static/assets/images/${book.book_img}`;
-    document.getElementById("book-status").textContent = book.status;
-    document.getElementById("book-status").classList.add(book.status);
+    ).src = `/static/assets/books/${book.book_img}`;
+    document.getElementById("book-status").textContent = status;
+    document.getElementById("book-status").classList.add(status);
+
     document.getElementById("book-title").textContent = book.title;
     document.getElementById("book-isbn").textContent = book.isbn;
     document.getElementById("book-author").textContent = book.author;
@@ -99,39 +109,124 @@ export const BookDetailsView = {
 ======================== */
 
 export const ProfileView = {
-  init({ onReturnClicked, onRemoveFavoriteClicked }) {
-    // Avatar
+  init({
+    profile,
+    onReturnClicked,
+    onRemoveFavoriteClicked,
+    onUpdateUsername,
+    onUpdateEmail,
+    onPasswordUpdate,
+  }) {
+    // hero
     this.avatar = document.getElementById("profile-avatar");
-
-    // Identity
     this.username = document.getElementById("profile-username");
     this.email = document.getElementById("profile-email");
-    this.joinedDate = document.getElementById("date-joined");
+    // this.joinedDate = document.getElementById("date-joined");
 
-    // Active borrowings
+    // content
+    this.content = document.getElementById("profile-content");
+
+    // tables
+    this.borrowings = document.querySelector(".active-borrowings");
+    this.historyTable = document.querySelector(".history");
+    this.favoritesTable = document.querySelector(".favorites");
+
     this.active = document.getElementById("active-borrowings");
-
-    // Borrowings history
     this.history = document.getElementById("borrowings-history");
-
-    // Favorites
-    this.favorites = document.getElementById("favorites");
+    this.favorites = document.getElementById("favorite-books");
 
     if (
       !this.active ||
       !this.username ||
       !this.email ||
-      !this.joinedDate ||
       !this.avatar ||
       !this.history ||
-      !this.favorites
+      !this.favorites ||
+      !this.content
     )
       return;
 
-    this.bindEvents(onReturnClicked, onRemoveFavoriteClicked);
+    console.log("passed");
+
+    this.render(profile, this.hashInput());
+    this.bindEvents(
+      profile,
+      onReturnClicked,
+      onRemoveFavoriteClicked,
+      onUpdateUsername,
+      onUpdateEmail,
+      onPasswordUpdate
+    );
   },
 
-  bindEvents(onReturnClicked, onRemoveFavoriteClicked) {
+  render(profile, subpage) {
+    this.renderHero(profile);
+
+    switch (subpage) {
+      case "borrowings":
+        this.selectSubpage(subpage);
+        this.renderActiveBorrowings(profile);
+        break;
+
+      case "history":
+        this.selectSubpage(subpage);
+        this.renderBorrowingsHistory(profile);
+        break;
+
+      case "favorites":
+        this.selectSubpage(subpage);
+        this.renderFavorites(profile);
+        break;
+
+      case "settings":
+        this.selectSubpage(subpage);
+        this.renderAccountInfo(profile);
+        break;
+
+      default:
+        this.renderActiveBorrowings(profile);
+        break;
+    }
+  },
+
+  bindEvents(
+    profile,
+    onReturnClicked,
+    onRemoveFavoriteClicked,
+    onUpdateUsername,
+    onUpdateEmail,
+    onPasswordUpdate
+  ) {
+    // borrowings subpage
+    document
+      .getElementById("borrowings-subpage")
+      .addEventListener("click", () => {
+        location.hash = "borrowings";
+        this.render(profile, this.hashInput());
+      });
+
+    // history subpage
+    document.getElementById("history-subpage").addEventListener("click", () => {
+      location.hash = "history";
+      this.render(profile, this.hashInput());
+    });
+
+    // favorites subpage
+    document
+      .getElementById("favorites-subpage")
+      .addEventListener("click", () => {
+        location.hash = "favorites";
+        this.render(profile, this.hashInput());
+      });
+
+    // settings subpage
+    document
+      .getElementById("settings-subpage")
+      .addEventListener("click", () => {
+        location.hash = "settings";
+        this.render(profile, this.hashInput());
+      });
+
     // Return Book
     this.active.addEventListener("click", async (e) => {
       const returnBtn = e.target.closest(".return-btn");
@@ -153,99 +248,320 @@ export const ProfileView = {
 
       onRemoveFavoriteClicked(favoriteId);
     });
+
+    // ===== SETTINGS =====
+
+    // === modal ===
+    // open modal (generic)
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-open-modal]");
+      if (!btn) return;
+
+      const selected = btn.dataset.openModal;
+      const modal = document.querySelector(selected);
+      if (!modal) return;
+
+      modal.classList.remove("hidden");
+    });
+    // close modal (generic)
+    document.addEventListener("click", (e) => {
+      if (
+        e.target.closest("[data-close-modal]") ||
+        e.target === e.target.closest("[data-modal]")
+      ) {
+        e.target.closest("[data-modal]").classList.add("hidden");
+      }
+    });
+    // close modal with esc button
+    document.addEventListener("keydown", (e) => {
+      if (e.key != "Escape") return;
+
+      const modal = document.querySelector("[data-modal]:not(.hidden)");
+      if (!modal) return;
+
+      modal.classList.add("hidden");
+    });
+    // submit form (generic)
+    document.addEventListener("submit", (e) => {
+      const modal = document.querySelector("[data-modal]");
+      const form = e.target.closest("[data-form-type]");
+      if (!form) return;
+
+      e.preventDefault();
+
+      const type = form.dataset.formType;
+
+      if (type === "username") {
+        onUpdateUsername(form);
+      }
+
+      if (type === "email") {
+        onUpdateEmail(form);
+      }
+      if (type === "password") {
+        onPasswordUpdate(form);
+      }
+
+      modal.classList.add("hidden");
+    });
   },
 
-  render(profile) {
+  closeUpdatePasswordMode() {
+    document.getElementById("update-password-model").classList.add("hidden");
+  },
+
+  renderErrorMsg(msg) {
+    document.getElementById("form-error").classList.remove("hidden");
+    document.getElementById("error").textContent = msg;
+  },
+
+  renderAccountInfo(profile) {
+    document.getElementById("info-username").textContent = profile.username;
+    document.getElementById("info-email").textContent = profile.email;
+  },
+
+  hashInput() {
+    return location.hash.replace("#", "") || "borrowings";
+  },
+
+  selectSubpage(subpage) {
+    switch (subpage) {
+      case "borrowings":
+        document
+          .getElementById("profile-borrowings-table")
+          .classList.remove("hidden");
+        document
+          .getElementById("profile-history-table")
+          .classList.add("hidden");
+        document.getElementById("favorites-table").classList.add("hidden");
+        document.getElementById("profile-settings").classList.add("hidden");
+
+        document.getElementById("borrowings-subpage").classList.add("active");
+        document.getElementById("history-subpage").classList.remove("active");
+        document.getElementById("favorites-subpage").classList.remove("active");
+        document.getElementById("settings-subpage").classList.remove("active");
+        break;
+      case "history":
+        document
+          .getElementById("profile-history-table")
+          .classList.remove("hidden");
+        document
+          .getElementById("profile-borrowings-table")
+          .classList.add("hidden");
+        document.getElementById("favorites-table").classList.add("hidden");
+        document.getElementById("profile-settings").classList.add("hidden");
+
+        document.getElementById("favorites-subpage").classList.remove("active");
+        document.getElementById("history-subpage").classList.add("active");
+        document
+          .getElementById("borrowings-subpage")
+          .classList.remove("active");
+        document.getElementById("settings-subpage").classList.remove("active");
+        break;
+
+      case "favorites":
+        document.getElementById("favorites-table").classList.remove("hidden");
+        document
+          .getElementById("profile-borrowings-table")
+          .classList.add("hidden");
+        document
+          .getElementById("profile-history-table")
+          .classList.add("hidden");
+        document.getElementById("profile-settings").classList.add("hidden");
+
+        document.getElementById("favorites-subpage").classList.add("active");
+        document
+          .getElementById("borrowings-subpage")
+          .classList.remove("active");
+        document.getElementById("history-subpage").classList.remove("active");
+        document.getElementById("settings-subpage").classList.remove("active");
+        break;
+
+      case "settings":
+        document.getElementById("profile-settings").classList.remove("hidden");
+        document.getElementById("favorites-table").classList.add("hidden");
+        document
+          .getElementById("profile-borrowings-table")
+          .classList.add("hidden");
+        document
+          .getElementById("profile-history-table")
+          .classList.add("hidden");
+
+        document.getElementById("settings-subpage").classList.add("active");
+        document.getElementById("favorites-subpage").classList.remove("active");
+        document
+          .getElementById("borrowings-subpage")
+          .classList.remove("active");
+        document.getElementById("history-subpage").classList.remove("active");
+    }
+  },
+
+  renderHero(profile) {
     // Avatar
     this.avatar.textContent = profile.username[0].toUpperCase();
 
     // Identity
     this.username.textContent = profile.username;
     this.email.textContent = profile.email;
-    this.joinedDate.textContent = UI.toLocaleDateFormatter(profile.joined_date);
-
-    // Active borrowings
-    const activeBorrowings = profile.all_borrowings.filter(
-      (b) => (b.status === "active") | (b.status === "overdue")
-    );
-
-    // Active borrowings
-    this.renderActiveBorrowings(activeBorrowings);
-
-    // History
-    const borrowingsHistory = profile.all_borrowings.filter(
-      (b) => b.status === "returned"
-    );
-
-    this.renderBorrowingsHistory(borrowingsHistory);
-
-    // Favorites
-    this.renderFavorites(profile.favorites);
+    // this.joinedDate.textContent = UI.toLocaleDateFormatter(profile.joined_date);
   },
 
   // Active borrowings
-  renderActiveBorrowings(activeBorrowingsList) {
-    this.active.innerHTML = "";
+  renderActiveBorrowings(profile) {
+    const tbody = this.active;
+    const table = this.borrowings;
+    tbody.innerHTML = "";
 
-    if (!activeBorrowingsList) return;
-    activeBorrowingsList.forEach((borrowing) => {
-      const tr = `
-      <tr>
-        <td>${borrowing.book_id}</td>
-        <td title="${borrowing.title}">${borrowing.title}</td>
-        <td>${UI.formatDate(borrowing.borrowed_at)}</td>
-        <td>${UI.formatDate(borrowing.due_at)}</td>
-        <td><span class="${borrowing.status}">${borrowing.status}</span></td>
-        <td>
-          <button
-            class="return-btn btn-action"
-            data-borrowing-id="${borrowing.id}"
-            type="button">
-            Return
-          </button>
-        </td>
-      </tr>
-    `;
-      this.active.insertAdjacentHTML("beforeend", tr);
+    // Active borrowings
+    const activeBorrowings = profile.all_borrowings.filter(
+      (b) => b.status === "active" || b.status === "overdue"
+    );
+
+    // empty state
+    if (activeBorrowings.length === 0) {
+      table.classList.add("is-empty");
+      table.classList.remove("has-data");
+
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr class="empty-row">
+          <td colspan="6">
+            <div class="empty-state">
+              <img src="/static/assets/icons/empty.png">
+              <p>No active borrowings yet</p>
+            </div>
+          </td>
+        </tr>
+      `
+      );
+      return;
+    }
+
+    table.classList.remove("is-empty");
+    table.classList.add("has-data");
+
+    // data rows
+    activeBorrowings.forEach((borrowing) => {
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr>
+          <td class="id">${borrowing.book_id}</td>
+          <td class="title">${borrowing.title}</td>
+          <td>${UI.formatDate(borrowing.borrowed_at)}</td>
+          <td>${UI.formatDate(borrowing.due_at)}</td>
+          <td class="status-cell"><span class="status-badge status-${
+            borrowing.status
+          }">${borrowing.status}</span></td>
+          <td>
+            <button
+              class="return-btn btn btn-sm btn-return"
+              data-borrowing-id="${borrowing.id}"
+              type="button">
+              Return
+            </button>
+          </td>
+        </tr>
+        `
+      );
     });
   },
 
   // Recent borrowings history
-  renderBorrowingsHistory(borrowingsHistory) {
-    this.history.innerHTML = "";
+  renderBorrowingsHistory(profile) {
+    const tbody = this.history;
+    const table = this.historyTable;
+    tbody.innerHTML = "";
 
-    borrowingsHistory.slice(0, 5).forEach((borrowing) => {
-      const tr = `
-      <tr>
-        <td>${borrowing.book_id}</td>
-        <td title="${borrowing.title}">${borrowing.title}</td>
-        <td>${UI.formatDate(borrowing.borrowed_at)}</td>
-        <td>${UI.formatDate(borrowing.returned_at)}</td>
-      </tr>
-    `;
-      this.history.insertAdjacentHTML("beforeend", tr);
+    const borrowingsHistory = profile.all_borrowings.filter(
+      (b) => b.status === "returned"
+    );
+
+    if (borrowingsHistory.length === 0) {
+      table.classList.add("is-empty");
+      table.classList.remove("has-data");
+
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr class="empty-row">
+          <td colspan="4">
+            <div class="empty-state">
+              <img src="/static/assets/icons/empty.png">
+              <p>No borrowed books yet</p>
+            </div>
+          </td>
+        </tr>
+        `
+      );
+      return;
+    }
+
+    table.classList.remove("is-empty");
+    table.classList.add("has-data");
+
+    borrowingsHistory.forEach((borrowing) => {
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr>
+          <td>${borrowing.book_id}</td>
+          <td title="${borrowing.title}">${borrowing.title}</td>
+          <td>${UI.formatDate(borrowing.borrowed_at)}</td>
+          <td>${UI.formatDate(borrowing.returned_at)}</td>
+          <td></td>
+        </tr>
+        `
+      );
     });
   },
 
   // Favorites
-  renderFavorites(favoritesList) {
-    this.favorites.innerHTML = "";
+  renderFavorites(profile) {
+    const tbody = this.favorites;
+    const table = this.favoritesTable;
+    tbody.innerHTML = "";
 
-    favoritesList.slice(0, 5).forEach((f) => {
-      const tr = `
-      <tr>
-        <td>${f.title}</td>
-        <td>
-          <button
-            class="remove-favorite-btn btn-action"
-            type="button"
-            data-remove-favorite-btn="${f.id}"
-            >Remove
-          </button>
-        </td>
-      </tr>
-    `;
-      this.favorites.insertAdjacentHTML("beforeend", tr);
+    if (profile.favorites.length === 0) {
+      table.classList.add("is-empty");
+      table.classList.remove("has-data");
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr class="empty-row">
+          <td colspan="2">
+            <div class="empty-state">
+              <img src="/static/assets/icons/empty.png">
+              <p>No favorite books yet</p>
+            </div>
+          </td>
+        </tr>
+        `
+      );
+      return;
+    }
+
+    table.classList.remove("is-empty");
+    table.classList.add("has-data");
+
+    profile.favorites.forEach((f) => {
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr>
+          <td class="title">${f.title}</td>
+          <td class="action">
+            <button
+              class="remove-favorite-btn btn btn-sm btn-delete"
+              type="button"
+              data-remove-favorite-btn="${f.id}"
+              >Remove
+            </button>
+          </td>
+        </tr>
+        `
+      );
     });
   },
 };
@@ -293,7 +609,7 @@ export const AdminView = {
       this.stockAttentionCount.textContent = outOfStockBooks.length;
     }
 
-    // indicators
+    // KPIs
     this.borrowingsCount.textContent = `${borrowings.length}`;
     this.usersCount.textContent = `${users.length}`;
     this.booksCount.textContent = `${books.length}`;
@@ -414,22 +730,75 @@ export const SignUpView = {
     this.signUpForm = document.getElementById("signup-form");
     this.googleAuth = document.getElementById("oauth-google");
 
+    // loading
+    this.submitBtn = this.signUpForm.querySelector("button[type='submit']");
+    this.spinner = this.submitBtn.querySelector(".spinner");
+    this.btnText = this.submitBtn.querySelector(".submit-text");
+
+    // error
+    this.error = this.signUpForm.querySelector(".error");
+
     if (!this.signUpForm || !this.googleAuth) return;
 
     this.bindEvents(onSignUpClick, onGoogleAuthClicked);
   },
 
+  // events
   bindEvents(onSignUpClick, onGoogleAuthClicked) {
-    // Sign Up
+    // local
     this.signUpForm.addEventListener("submit", (e) => {
       e.preventDefault();
       onSignUpClick(this.signUpForm);
     });
 
-    // Continue with Google
+    // google
     this.googleAuth.addEventListener("click", () => {
       onGoogleAuthClicked();
     });
+  },
+
+  // loading state
+  showLoading() {
+    if (!this.submitBtn) return;
+    this.submitBtn.disabled = true;
+    this.spinner.classList.remove("hidden");
+    this.btnText.classList.add("hidden");
+  },
+
+  hideLodaing() {
+    if (!this.submitBtn) return;
+    this.submitBtn.disabled = true;
+    this.spinner.classList.add("hidden");
+    this.btnText.classList.remove("hidden");
+  },
+
+  showError(e) {
+    this.error.classList.remove("hidden");
+    this.error.textContent = e;
+  },
+
+  hideError() {
+    this.error.classList.add("hidden");
+  },
+
+  showGoogleLoading() {
+    this.googleAuth.disabled = true;
+
+    const spinner = this.googleAuth.querySelector(".spinner");
+    const btnContent = this.googleAuth.querySelector(".oauth-btn-content");
+
+    spinner.classList.remove("hidden");
+    btnContent.classList.add("hidden");
+  },
+
+  resetGoogleLoading() {
+    this.googleAuth.disabled = false;
+
+    const spinner = this.googleAuth.querySelector(".spinner");
+    const btnContent = this.googleAuth.querySelector(".oauth-btn-content");
+
+    spinner.classList.add("hidden");
+    btnContent.classList.remove("hidden");
   },
 };
 
@@ -439,8 +808,17 @@ export const SignUpView = {
 
 export const SignInView = {
   init({ onSignInClick, onGoogleAuthClicked }) {
+    // signin form
     this.signInForm = document.getElementById("signin-form");
     this.googleAuth = document.getElementById("oauth-google");
+
+    // loading
+    this.submitBtn = this.signInForm.querySelector("button[type='submit']");
+    this.spinner = this.submitBtn.querySelector(".spinner");
+    this.btnText = this.submitBtn.querySelector(".submit-text");
+
+    // error
+    this.error = this.signInForm.querySelector(".error");
 
     if (!this.signInForm || !this.googleAuth) return;
 
@@ -458,6 +836,47 @@ export const SignInView = {
     this.googleAuth.addEventListener("click", () => {
       onGoogleAuthClicked();
     });
+  },
+
+  showLoading() {
+    this.submitBtn.disabled = true;
+    this.spinner.classList.remove("hidden");
+    this.btnText.classList.add("hidden");
+  },
+
+  hideLoading() {
+    this.submitBtn.disabled = false;
+    this.spinner.classList.add("hidden");
+    this.btnText.classList.remove("hidden");
+  },
+
+  showError(e) {
+    this.error.classList.remove("hidden");
+    this.error.textContent = e;
+  },
+
+  hideError() {
+    this.error.classList.add("hidden");
+  },
+
+  showGoogleLoading() {
+    this.googleAuth.disabled = true;
+
+    const spinner = this.googleAuth.querySelector(".spinner");
+    const btnContent = this.googleAuth.querySelector(".oauth-btn-content");
+
+    spinner.classList.remove("hidden");
+    btnContent.classList.add("hidden");
+  },
+
+  resetGoogleLoading() {
+    this.googleAuth.disabled = false;
+
+    const spinner = this.googleAuth.querySelector(".spinner");
+    const btnContent = this.googleAuth.querySelector(".oauth-btn-content");
+
+    spinner.classList.add("hidden");
+    btnContent.classList.remove("hidden");
   },
 };
 
@@ -479,7 +898,6 @@ export const NavbarView = {
 
     // User links
     this.profileLink = document.getElementById("profile-link");
-    this.settingsLink = document.getElementById("settings-link");
 
     // admin links
     this.overviewLink = document.getElementById("overview-link");
@@ -504,8 +922,7 @@ export const NavbarView = {
       !this.overviewLink ||
       !this.manageBooksLink ||
       !this.manageUsersLink ||
-      !this.manageBorrowingsLink ||
-      !this.settingsLink
+      !this.manageBorrowingsLink
     )
       return;
 
@@ -588,124 +1005,58 @@ export const NavbarView = {
 
 export const ManageBooksView = {
   init({
+    books,
     onSearch,
-    onAddBookSubmit,
-    onEditBookClicked,
-    onEditBookSubmit,
     onDeleteBookClicked,
+    onAddBookSubmit,
+    onEditBookSubmit,
   }) {
     this.container = document.getElementById("manage-books-data");
-    this.searchField = document.getElementById("search-books-table");
 
-    // add book model
-    this.addBookModel = document.getElementById("add-book-model");
-    this.openAddModel = document.getElementById("open-add-model");
-    this.closeAddModel = document.getElementById("close-add-model");
-    this.addBookForm = document.getElementById("add-book-form");
+    this.searchField = document.getElementById("search-field");
+    this.clearSearch = document.getElementById("clear-search");
 
     this.addFormImgFile = document.getElementById("add-form-img-file");
-    this.editFormImgFile = document.getElementById("edit-form-img-file");
-
     this.addBookFileName = document.getElementById("add-book-file-name");
+
+    this.editFormImgFile = document.getElementById("edit-form-img-file");
     this.editBookFileName = document.getElementById("edit-book-file-name");
 
-    // edit book model
-    this.editBookModel = document.getElementById("edit-book-model");
-    this.closeEditModel = document.getElementById("close-edit-model");
-    this.editBookForm = document.getElementById("edit-book-form");
-
-    if (
-      !this.container ||
-      !this.addBookModel ||
-      !this.addBookForm ||
-      !this.editBookModel ||
-      !this.editBookForm ||
-      !this.searchField ||
-      !this.closeAddModel ||
-      !this.closeEditModel ||
-      !this.openAddModel ||
-      !this.addFormImgFile ||
-      !this.editFormImgFile ||
-      !this.addBookFileName ||
-      !this.editBookFileName
-    )
+    if (!this.container || !this.addFormImgFile || !this.editFormImgFile)
       return;
 
+    this.books = books;
+
+    this.render(books);
     this.bindEvents(
       onSearch,
+      onDeleteBookClicked,
       onAddBookSubmit,
-      onEditBookClicked,
-      onEditBookSubmit,
-      onDeleteBookClicked
+      onEditBookSubmit
     );
   },
 
-  bindEvents(
-    onSearch,
-    onAddBookSubmit,
-    onEditBookClicked,
-    onEditBookSubmit,
-    onDeleteBookClicked
-  ) {
-    // upload img for add book form
-    this.addFormImgFile.addEventListener("change", () => {
-      this.addBookFileName.textContent =
-        this.addFormImgFile.files[0]?.name || "No file selected";
-    });
+  render(books) {
+    this.renderBooksTable(books);
+  },
 
-    // upload img for edit book form
-    this.editFormImgFile.addEventListener("change", () => {
-      this.editBookFileName.textContent =
-        this.editFormImgFile.files[0]?.name || "No file selected";
-    });
-
+  bindEvents(onSearch, onDeleteBookClicked, onAddBookSubmit, onEditBookSubmit) {
     // Search
     this.searchField.addEventListener("input", (e) => {
       onSearch(e.target.value);
+
+      // if empty hide clear
+      if (e.target.value === "") {
+        this.clearSearch.classList.add("hidden");
+      } else {
+        this.clearSearch.classList.remove("hidden");
+      }
     });
 
-    // Open add book model
-    this.openAddModel.addEventListener("click", () => {
-      this.openAddBookModel();
-    });
-
-    // Close add book model
-    this.closeAddModel.addEventListener("click", () => {
-      this.closeAddBookModel();
-    });
-
-    // Add book form
-    this.addBookForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      onAddBookSubmit(this.addBookForm);
-    });
-
-    // Open edit book model
-    this.container.addEventListener("click", async (e) => {
-      const btn = e.target.closest(".edit-book-btn");
-      if (!btn) return;
-
-      const bookId = Number(btn.dataset.bookId) || null;
-      this.editBookForm.dataset.bookId = bookId;
-
-      onEditBookClicked(bookId);
-    });
-
-    // Close edit book model
-    this.closeEditModel.addEventListener("click", () => {
-      this.closeEditBookModel();
-    });
-
-    // Edit book
-    this.editBookForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const bookId = this.editBookForm.dataset.bookId;
-      const formData = new FormData(this.editBookForm);
-
-      if (!bookId || !formData) return;
-
-      onEditBookSubmit(bookId, formData);
+    // clear search
+    this.clearSearch.addEventListener("click", () => {
+      this.searchField.value = "";
+      this.clearSearch.classList.add("hidden");
     });
 
     // Delete book
@@ -717,59 +1068,157 @@ export const ManageBooksView = {
 
       onDeleteBookClicked(bookId);
     });
+
+    // === MODALS ===
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-open-modal]");
+      if (!btn) return;
+
+      const modal = document.querySelector(btn.dataset.openModal);
+
+      if (modal.id === "edit-book") {
+        const book = this.books.find(
+          (b) => b.id === Number(btn.dataset.bookId)
+        );
+
+        this.initEditBookForm(book);
+      }
+
+      modal.classList.remove("hidden");
+    });
+
+    document.addEventListener("click", (e) => {
+      const closeBtn = e.target.closest("[data-close-modal]");
+
+      const modal = document.querySelector("[data-modal]:not(.hidden)");
+
+      if (e.target === closeBtn) {
+        this.resetForm();
+        modal.classList.add("hidden");
+      }
+
+      if (e.target === modal) {
+        this.resetForm();
+        modal.classList.add("hidden");
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+
+      const modal = document.querySelector("[data-modal]:not(.hidden)");
+
+      this.resetForm();
+      modal.classList.add("hidden");
+    });
+
+    document.addEventListener("submit", (e) => {
+      const form = e.target.closest("[data-form-type]");
+      e.preventDefault();
+
+      const type = form.dataset.formType;
+
+      if (type === "add-book") {
+        onAddBookSubmit(form);
+      }
+
+      if (type === "edit-book") {
+        onEditBookSubmit(form.dataset.bookId, form);
+      }
+
+      this.resetForm();
+      this.closeModal();
+    });
+
+    // upload img for add book form
+    this.addFormImgFile.addEventListener("change", () => {
+      this.addBookFileName.textContent =
+        this.addFormImgFile.files[0]?.name || "No file selected";
+    });
+
+    // upload img for edit book form
+    this.editFormImgFile.addEventListener("change", () => {
+      this.editBookFileName.textContent =
+        this.editFormImgFile.files[0]?.name || "No file selected";
+    });
   },
 
-  openAddBookModel() {
-    this.addBookModel.classList.remove("hidden");
+  initEditBookForm(book) {
+    // // select the edit user form
+    const form = document.querySelector('[data-form-type="edit-book"]');
+
+    form.dataset.bookId = book.id;
+
+    // fill the fields with the precreated data
+    form.isbn.value = book.isbn ?? "";
+    form.title.value = book.title ?? "";
+    form.author.value = book.author ?? "";
+    form.language.value = book.language ?? "";
+    form.subtitle.value = book.subtitle ?? "";
+    form.page_count.value = book.page_count ?? "";
+    form.publisher.value = book.publisher ?? "";
+    form.published_at.value = book.published_at ?? "";
+    form.total_copies.value = book.total_copies ?? "";
+    form.description.value = book.description ?? "";
   },
 
-  closeAddBookModel() {
-    this.addBookModel.classList.add("hidden");
+  resetForm() {
+    document.querySelector("[data-form-type]:not(.hidden)").reset();
   },
 
-  resetAddBookForm() {
-    this.addBookForm.reset();
-  },
-
-  openEditBookModel(book) {
-    this.editBookForm.isbn.value = book.isbn ?? "";
-    this.editBookForm.title.value = book.title ?? "";
-    this.editBookForm.author.value = book.author ?? "";
-    this.editBookForm.language.value = book.language ?? "";
-    this.editBookForm.subtitle.value = book.subtitle ?? "";
-    this.editBookForm.page_count.value = book.page_count ?? "";
-    this.editBookForm.publisher.value = book.publisher ?? "";
-    this.editBookForm.published_at.value = book.published_at ?? "";
-    this.editBookForm.total_copies.value = book.total_copies ?? "";
-    this.editBookForm.description.value = book.description ?? "";
-
-    this.editBookModel.classList.remove("hidden");
-  },
-
-  closeEditBookModel() {
-    this.editBookModel.classList.add("hidden");
+  closeModal() {
+    document.querySelector("[data-modal]:not(.hidden)").classList.add("hidden");
   },
 
   // Render manage books table
   renderBooksTable(books) {
-    this.container.innerHTML = "";
+    const tbody = this.container;
+    const table = document.querySelector(".books");
+    tbody.innerHTML = "";
+
+    // empty state
+    if (books.length === 0) {
+      table.classList.add("is-empty");
+      table.classList.remove("has-data");
+
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr class="empty-row">
+          <td colspan="5">
+            <div class="empty-state">
+              <img src="/static/assets/icons/empty.png">
+              <p>No books found</p>
+            </div>
+          </td>
+        </tr>
+      `
+      );
+      return;
+    }
+
+    table.classList.remove("is-empty");
+    table.classList.add("has-data");
 
     books.forEach((b) => {
       const book = `
       <tr>
-        <td>${b.id}</td>
-        <td>${b.title}</td>
-        <td>${b.author}</td>
-        <td>${b.total_copies}</td>
+        <td class="id">${b.id}</td>
+        <td class="title">${b.title}</td>
+        <td class="author">${b.author}</td>
+        <td class="copies">${b.total_copies}</td>
         <td>
-          <div class="manage-books-btns">
+          <div class="table-btns">
             <button
-              class="edit-book-btn manage-books-btn btn-action"
-              data-book-id="${b.id}">
-              Edit
+              type="button"
+              class="edit-book-btn btn btn-sm btn-edit"
+              data-book-id="${b.id}"
+              data-open-modal="#edit-book"
+              > Edit
             </button>
             <button
-              class="delete-book-btn manage-books-btn btn-action btn-danger"
+              class="delete-book-btn btn btn-sm btn-delete"
               data-book-id="${b.id}">
               Delete
             </button>
@@ -791,41 +1240,21 @@ export const ManageUsersView = {
 
   init({
     onSearch,
-    onEditUserClicked,
+    onEditUserModalOpen,
     onEditUserSubmit,
     onAddUserSubmit,
     onDeleteUserClicked,
   }) {
     this.container = document.getElementById("manage-users-data");
-    this.searchField = document.getElementById("search-users-table");
 
-    // add user model
-    this.addUserModel = document.getElementById("add-user-model");
-    this.openAddUserModel = document.getElementById("open-add-user-model");
-    this.closeAddUserModel = document.getElementById("close-add-user-model");
-    this.addUserForm = document.getElementById("add-user-form");
+    this.searchField = document.getElementById("search-field");
+    this.clearSearch = document.getElementById("clear-search");
 
-    // edit user model
-    this.openEditUserModel = document.getElementById("edit-user-model");
-    this.closeEditUserModel = document.getElementById("close-edit-user-model");
-    this.editUserForm = document.getElementById("edit-user-form");
-
-    if (
-      !this.container ||
-      !this.searchField ||
-      !this.openAddUserModel ||
-      !this.closeAddUserModel ||
-      !this.addUserModel ||
-      !this.addUserForm ||
-      !this.openEditUserModel ||
-      !this.editUserForm ||
-      !this.closeEditUserModel
-    )
-      return;
+    if (!this.container || !this.searchField) return;
 
     this.bindEvents(
       onSearch,
-      onEditUserClicked,
+      onEditUserModalOpen,
       onEditUserSubmit,
       onAddUserSubmit,
       onDeleteUserClicked
@@ -834,63 +1263,97 @@ export const ManageUsersView = {
 
   bindEvents(
     onSearch,
-    onEditUserClicked,
+    onEditUserModalOpen,
     onEditUserSubmit,
     onAddUserSubmit,
     onDeleteUserClicked
   ) {
     // Search
     this.searchField.addEventListener("input", (e) => {
+      onSearch(e.target.value);
+
+      // if empty hide clear
+      if (e.target.value === "") {
+        this.clearSearch.classList.add("hidden");
+      } else {
+        this.clearSearch.classList.remove("hidden");
+      }
+    });
+
+    // clear search
+    this.clearSearch.addEventListener("click", () => {
+      this.searchField.value = "";
+      this.clearSearch.classList.add("hidden");
+    });
+
+    // === USER MODALS ===
+
+    // open modal (generic)
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-open-modal]");
+      if (!btn) return;
+
+      const selected = btn.dataset.openModal;
+
+      const modal = document.querySelector(selected);
+      if (!modal) return;
+
+      if (modal.id === "edit-user") {
+        const userId = btn.dataset.userId;
+        onEditUserModalOpen(userId);
+      }
+
+      modal.classList.remove("hidden");
+    });
+
+    // close with btn
+    document.addEventListener("click", (e) => {
+      const modal = e.target.closest("[data-modal]:not(.hidden)");
+      const closeBtn = e.target.closest("[data-close-modal]");
+
+      this.resetForm();
+
+      if (closeBtn) {
+        modal.classList.add("hidden");
+      }
+
+      if (e.target === modal) {
+        modal.classList.add("hidden");
+      }
+    });
+
+    // close with esc btn or when clicking outside
+    document.addEventListener("keydown", (e) => {
+      if (!e.key === "Escape") return;
+
+      // selects the currently visible modal
+      const modal = document.querySelector("[data-modal]:not(.hidden)");
+      if (!modal) return;
+
+      if (e.key === "Escape") {
+        this.resetForm();
+        modal.classList.add("hidden");
+      }
+    });
+
+    // submit modal (generic)
+    document.addEventListener("submit", (e) => {
+      const modal = e.target.closest("[data-modal]");
+      const form = e.target.closest("[data-form-type]");
+
+      if (!form || !modal) return;
+
       e.preventDefault();
-      this.searchQuery = e.target.value;
-      onSearch(this.searchQuery);
-    });
 
-    // Open add user model
-    this.openAddUserModel.addEventListener("click", () => {
-      this.openAddModel();
-    });
+      const type = form.dataset.formType;
 
-    // Close add user model
-    this.closeAddUserModel.addEventListener("click", () => {
-      this.closeAddModel();
-    });
+      if (type === "add-user") {
+        onAddUserSubmit(form);
+      }
 
-    // Open edit user model
-    this.container.addEventListener("click", (e) => {
-      const editBtn = e.target.closest(".edit-user-btn");
-      if (!editBtn) return;
-
-      const userId = Number(editBtn.dataset.userId);
-      if (!userId) return;
-
-      this.editUserForm.dataset.userId = userId;
-
-      onEditUserClicked(userId);
-    });
-
-    // close edit user model
-    this.closeEditUserModel.addEventListener("click", () => {
-      this.closeEditModel();
-    });
-
-    // Edit user
-    this.editUserForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const userId = this.editUserForm.dataset.userId;
-      if (!userId) return;
-
-      const formData = new FormData(this.editUserForm);
-      if (!formData) return;
-
-      onEditUserSubmit(userId, formData);
-    });
-
-    // Add user
-    this.addUserForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      onAddUserSubmit(this.addUserForm);
+      if (type === "edit-user") {
+        onEditUserSubmit(form.dataset.userId, form);
+      }
     });
 
     // delete user
@@ -905,31 +1368,53 @@ export const ManageUsersView = {
     });
   },
 
-  openAddModel() {
-    this.addUserModel.classList.remove("hidden");
+  initEditUserModal(user) {
+    const form = document.querySelector('[data-form-type="edit-user"]');
+    form.username.value = user.username || "";
+    form.email.value = user.email || "";
+
+    // populate user id
+    form.dataset.userId = user.id;
   },
 
-  closeAddModel() {
-    this.addUserModel.classList.add("hidden");
+  closeVisibleModal() {
+    const modal = document.querySelector("[data-modal]:not(.hidden)");
+    modal.classList.add("hidden");
   },
 
-  resetAddModel() {
-    this.addUserForm.reset();
-  },
-
-  openEditModel(user) {
-    this.editUserForm.username.value = user.username ?? "";
-    this.editUserForm.email.value = user.email ?? "";
-
-    this.openEditUserModel.classList.remove("hidden");
-  },
-
-  closeEditModel() {
-    this.openEditUserModel.classList.add("hidden");
+  resetForm() {
+    const form = document.querySelector("[data-form-type]:not(.hidden)");
+    form.reset();
   },
 
   renderUsersTable(books) {
-    this.container.innerHTML = "";
+    const tbody = this.container;
+    const table = document.querySelector(".users");
+    tbody.innerHTML = "";
+
+    // empty state
+    if (books.length === 0) {
+      table.classList.add("is-empty");
+      table.classList.remove("has-data");
+
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr class="empty-row">
+          <td colspan="5">
+            <div class="empty-state">
+              <img src="/static/assets/icons/empty.png">
+              <p>No users found</p>
+            </div>
+          </td>
+        </tr>
+      `
+      );
+      return;
+    }
+
+    table.classList.remove("is-empty");
+    table.classList.add("has-data");
 
     books.forEach((user) => {
       const tr = `
@@ -941,13 +1426,14 @@ export const ManageUsersView = {
           <td>
             <button 
               type="button" 
-              class="edit-user-btn btn-action"
-              data-user-id="${user.id}">
-              Edit
+              class="edit-user-btn btn btn-sm btn-edit"
+              data-user-id="${user.id}"
+              data-open-modal="#edit-user"
+              > Edit
             </button>
             <button 
               type="button" 
-              class="delete-user-btn btn-action btn-danger"
+              class="delete-user-btn btn btn-sm btn-delete"
               data-user-id="${user.id}">
               Delete
             </button>
@@ -971,8 +1457,12 @@ export const ManageBorrowingsView = {
 
   init({ applyFilters, onReturnClicked }) {
     this.container = document.getElementById("manage-borrowings-data");
+
+    this.searchField = document.getElementById("search-field");
+    this.clearSearch = document.getElementById("clear-search");
+
     this.filters = document.getElementById("borrowings-filters");
-    this.searchField = document.getElementById("search-borrowings-field");
+
     if (!this.container || !this.filters || !this.searchField) return;
 
     this.bindEvents(applyFilters, onReturnClicked);
@@ -981,9 +1471,20 @@ export const ManageBorrowingsView = {
   bindEvents(applyFilters, onReturnClicked) {
     // Search listener
     this.searchField.addEventListener("input", (e) => {
-      e.preventDefault();
-
       this.options.searchQuery = e.target.value;
+      applyFilters(this.options);
+
+      if (e.target.value) {
+        this.clearSearch.classList.remove("hidden");
+      } else {
+        this.clearSearch.classList.add("hidden");
+      }
+    });
+
+    this.clearSearch.addEventListener("click", () => {
+      this.options.searchQuery = "";
+      this.searchField.value = "";
+      this.clearSearch.classList.add("hidden");
       applyFilters(this.options);
     });
 
@@ -1010,18 +1511,47 @@ export const ManageBorrowingsView = {
   },
 
   renderBorrowingsTable(books) {
-    this.container.innerHTML = "";
+    const tbody = this.container;
+    const table = document.querySelector(".borrowings");
+    tbody.innerHTML = "";
+
+    // empty state
+    if (books.length === 0) {
+      table.classList.add("is-empty");
+      table.classList.remove("has-data");
+
+      tbody.insertAdjacentHTML(
+        "beforeend",
+        `
+        <tr class="empty-row">
+          <td colspan="7">
+            <div class="empty-state">
+              <img src="/static/assets/icons/empty.png">
+              <p>No borrowings found</p>
+            </div>
+          </td>
+        </tr>
+      `
+      );
+      return;
+    }
+
+    table.classList.remove("is-empty");
+    table.classList.add("has-data");
 
     books.forEach((borrowing) => {
-      const showReturnBtn = borrowing.status === "Active";
-      const showReturnDate = borrowing.status === "Returned";
+      const showReturnBtn =
+        borrowing.status === "active" || borrowing.status === "overdue";
+      const showReturnDate = borrowing.status === "returned";
       const tr = `
         <tr>
-          <td>${borrowing.user}</td>
-          <td>${borrowing.book}</td>
+          <td class="user">${borrowing.user}</td>
+          <td class="book">${borrowing.book}</td>
           <td>${UI.formatDate(borrowing.borrowed_at)}</td>
           <td>${UI.formatDate(borrowing.due_at)}</td>
-          <td>${borrowing.status}</td>
+          <td class="status-cell"><span class="status-badge status-${
+            borrowing.status
+          }">${borrowing.status}</span></td>
           <td>
             ${
               showReturnDate
@@ -1034,7 +1564,7 @@ export const ManageBorrowingsView = {
               showReturnBtn
                 ? `<button
                       type="button"
-                      class="return-borrowing-btn manage-borrowings-btn btn-action"
+                      class="return-borrowing-btn btn btn-sm btn-return"
                       data-borrowing-id="${borrowing.id}">
                       Return
                   </button>`
@@ -1043,7 +1573,174 @@ export const ManageBorrowingsView = {
           </td>
         </tr>
       `;
-      this.container.insertAdjacentHTML("beforeend", tr);
+      tbody.insertAdjacentHTML("beforeend", tr);
+    });
+  },
+};
+
+/* ========================
+   BROWSE BOOKS
+======================== */
+
+export const BrowseBookView = {
+  init({ data, onSearch, onClearSearch, onPageChange }) {
+    // books list
+    this.container = document.getElementById("all-books");
+
+    // search
+    this.searchInput = document.getElementById("search-field");
+    this.clearSearch = document.getElementById("clear-search");
+
+    // counters
+    this.booksCount = document.getElementById("books-count");
+
+    // pagination
+    this.pageTrack = document.getElementById("page-track");
+    this.pagination = document.getElementById("pagination");
+    this.nextBtn = document.getElementById("next-btn");
+    this.prevBtn = document.getElementById("prev-btn");
+
+    // empty state
+    this.emptyState = document.querySelector(".empty-state-wrapper");
+
+    if (!this.container || !this.searchInput) return;
+
+    this.bindEvents(onSearch, onClearSearch);
+    this.render(data, onPageChange);
+  },
+
+  bindEvents(onSearch, onClearSearch) {
+    // search input
+    this.searchInput.addEventListener("input", (e) => {
+      this.toggleClearSearch();
+      onSearch(e.target.value);
+    });
+
+    // clear search
+    this.clearSearch.addEventListener("click", (e) => {
+      this.hideClearSearch();
+      onClearSearch();
+    });
+
+    this.nextBtn.addEventListener("click", () => {
+      this.onPageChange(this.currentPage + 1);
+    });
+
+    this.prevBtn.addEventListener("click", () => {
+      this.onPageChange(this.currentPage - 1);
+    });
+  },
+
+  toggleClearSearch() {
+    this.clearSearch.classList.toggle("hidden", !this.searchInput.value);
+  },
+
+  hideClearSearch() {
+    this.clearSearch.classList.add("hidden");
+  },
+
+  render(data, onPageChange) {
+    this.currentPage = data.current_page;
+    this.onPageChange = onPageChange;
+
+    const isEmpty = data.total_items === 0;
+    const isSingePage = data.total_pages <= 1;
+
+    this.renderTotalItems(data);
+    this.renderBooks(data.books);
+
+    const hidePagination = isEmpty || isSingePage;
+
+    this.pagination.classList.toggle("hidden", hidePagination);
+    this.pageTrack.classList.toggle("hidden", hidePagination);
+
+    document.getElementById("links-container").innerHTML = "";
+
+    if (!hidePagination) {
+      this.renderPageTrack(data);
+      this.renderPagination(
+        data.total_pages,
+        data.current_page,
+        this.onPageChange
+      );
+    }
+  },
+
+  // pagination
+  renderPagination(totalPages, currentPage) {
+    if (totalPages < 1) {
+      return;
+    }
+
+    document.getElementById("pagination").classList.remove("hidden");
+
+    const container = document.getElementById("links-container");
+
+    // clears for fresh rerendering (CRITICAL)
+    container.innerHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement("button");
+      btn.classList.add("link");
+      btn.textContent = i;
+
+      if (i === currentPage) btn.classList.add("active");
+
+      btn.addEventListener("click", () => {
+        this.onPageChange(i);
+      });
+
+      container.appendChild(btn);
+    }
+
+    this.prevBtn.disabled = currentPage === 1;
+    this.nextBtn.disabled = currentPage === totalPages;
+  },
+
+  setSearchValue(q) {
+    this.searchInput.value = q || "";
+  },
+
+  focusSearch() {
+    if (!this.searchInput) return;
+    this.searchInput.focus();
+    this.toggleClearSearch();
+  },
+
+  renderPageTrack(data) {
+    this.pageTrack.textContent = `${data.current_page} of ${data.total_pages}`;
+  },
+
+  renderTotalItems(data) {
+    this.booksCount.textContent = `${data.total_items} Books`;
+  },
+
+  // browse books
+  renderBooks(books) {
+    this.container.innerHTML = "";
+
+    if (books.length === 0) {
+      this.emptyState.classList.remove("hidden");
+      this.container.classList.add("hidden");
+      return;
+    }
+
+    this.emptyState.classList.add("hidden");
+    this.container.classList.remove("hidden");
+
+    books.forEach((b) => {
+      this.container.insertAdjacentHTML(
+        "beforeend",
+        `
+          <a href="/books/${b.id}">
+            <div class="book-container">
+              <img class="book-img" src="/static/assets/books/${b.book_img}"></img>
+              <h3 class="book-title">${b.title}</h3>
+              <p class="book-author">${b.author}</p>
+            </div>
+          </a>
+          `
+      );
     });
   },
 };

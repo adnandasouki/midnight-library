@@ -17,211 +17,347 @@
   </head>
   <body>
     <!-- navbar -->
-    <nav class="navbar">
-      <div class="navbar-wrapper">
-        <!-- brand -->
-        <a href="/" class="navbar-brand">
-          <img
-            src="{{ url_for('static', filename='assets/brand.svg') }}"
-            alt="brand"
-          />
-          <span>Library System</span>
-        </a>
-
-        <!-- avatar -->
-        <div class="navbar-buttons" id="auth-buttons">
-          <div class="avatar-dropdown hidden" id="avatar-dropdown">
-            <button
-              id="avatar-nav-btn"
-              class="avatar-sm"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span id="avatar-letter"></span>
-            </button>
-
-            <ul id="avatar-menu" class="avatar-menu" role="menu">
-              <!-- admin -->
-              <li class="menu-item hidden" id="overview-link" role="menuitem">
-                <a href="/admin" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/overview.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Overview</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-books-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-books" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/books.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Books</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-users-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-users" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/users.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Users</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-borrowings-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-borrowings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/borrowings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Borrowings</span></a
-                >
-              </li>
-              <!-- user -->
-              <li class="menu-item hidden" id="profile-link" role="menuitem">
-                <a href="/user/profile" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/profile.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Profile</span>
-                </a>
-              </li>
-              <li class="menu-item hidden" id="settings-link" role="menuitem">
-                <a href="/user/settings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/settings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Settings</span>
-                </a>
-              </li>
-              <li class="divider" role="separator"></li>
-              <li class="menu-item" role="menuitem">
-                <button class="btn-text" id="signout-btn">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/signout.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Sign out</span>
-                </button>
-              </li>
-            </ul>
-          </div>
-          <!-- guest -->
-          <button id="signin-btn" class="btn btn-outline hidden">
-            Sign in
-          </button>
-          <button id="signup-btn" class="btn btn-primary hidden">
-            Sign up
-          </button>
-        </div>
-      </div>
-    </nav>
+    {% include "partials/_navbar.html" %}
 
     <!-- main content -->
     <main class="profile-page">
-      <div id="toast" class="toast"></div>
-
-      <!-- identity -->
-      <section class="identity-card card-md">
+      <!-- hero -->
+      <section class="identity-section">
+        <!-- user info -->
         <div class="identity-header">
-          <div class="avatar" id="profile-avatar"></div>
+          <div class="avatar-profile" id="profile-avatar"></div>
+
           <div class="identity-info">
             <span class="username" id="profile-username"></span>
             <span class="email" id="profile-email"></span>
           </div>
         </div>
 
-        <span class="joined" id="date-joined"></span>
+        <!-- subpages -->
+        <div class="profile-subpages-wrapper">
+          <ul id="profile-subpages" class="profile-subpages">
+            <li id="borrowings-subpage" class="subpage">Borrowings</li>
+            <li id="history-subpage" class="subpage">History</li>
+            <li id="favorites-subpage" class="subpage">Favorites</li>
+            <li id="settings-subpage" class="subpage">Settings</li>
+          </ul>
+        </div>
       </section>
 
-      <!-- borrowings -->
-      <section class="user-active-borrowings card-md">
-        <div class="table-header">
-          <h4 class="title">Borrowings</h4>
-        </div>
-        <!-- table -->
-        <table class="user-books">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Borrowed Date</th>
-              <th>Due Date</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="active-borrowings"></tbody>
-        </table>
-      </section>
+      <!-- content -->
+      <div class="profile-content" id="profile-content">
+        <!-- borrowings -->
+        <section
+          id="profile-borrowings-table"
+          class="profile-section card-md hidden"
+        >
+          <!-- header -->
+          <div class="table-header">
+            <h4 class="title">Borrowings</h4>
+          </div>
+          <!-- table -->
+          <table class="profile-table active-borrowings">
+            <colgroup>
+              <col style="width: 5%" />
+              <col style="width: 25%" />
+              <col style="width: 15%" />
+              <col style="width: 15%" />
+              <col style="width: 10%" />
+              <col style="width: 10%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Borrowed Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="active-borrowings"></tbody>
+          </table>
+        </section>
 
-      <!-- borrowings history -->
-      <section class="user-active-borrowings card-md">
-        <div class="table-header">
-          <h4 class="title">History</h4>
-          <a class="borrowings-history-link" href="">View all</a>
-        </div>
-        <!-- table -->
-        <table class="user-books">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Borrowed Date</th>
-              <th>Returned Date</th>
-            </tr>
-          </thead>
-          <tbody id="borrowings-history"></tbody>
-        </table>
-      </section>
+        <!-- history -->
+        <section
+          id="profile-history-table"
+          class="profile-section card-md hidden"
+        >
+          <div class="table-header">
+            <h4 class="title">History</h4>
+          </div>
+          <!-- table -->
+          <table class="profile-table history">
+            <colgroup>
+              <col style="width: 5%" />
+              <col style="width: 50%" />
+              <col style="width: 22%" />
+              <col style="width: 22%" />
+              <col style="width: 1%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Borrowed Date</th>
+                <th>Returned Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="borrowings-history"></tbody>
+          </table>
+        </section>
 
-      <!-- favorites -->
-      <section class="user-active-borrowings card-md">
-        <div class="table-header">
-          <h4 class="title">Favorites</h4>
-          <a class="favorites-link" href="">View all</a>
-        </div>
-        <!-- table -->
-        <table class="user-books favorites">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="favorites"></tbody>
-        </table>
-      </section>
+        <!-- favorites -->
+        <section id="favorites-table" class="profile-section card-md hidden">
+          <div class="table-header">
+            <h4 class="title">Favorites</h4>
+          </div>
+          <!-- table -->
+          <table class="profile-table favorites">
+            <colgroup>
+              <col style="width: 80%" />
+              <col style="width: 20%" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="favorite-books"></tbody>
+          </table>
+        </section>
+
+        <!-- settings -->
+        <section id="profile-settings" class="profile-settings hidden">
+          <!-- account info -->
+          <div class="info-card card-md">
+            <div class="row">
+              <h1 class="info-card-title">Account Info</h1>
+            </div>
+
+            <span class="card-divider"></span>
+
+            <!-- open username modal -->
+            <div class="row">
+              <div>
+                <p class="row-label">Username</p>
+                <!-- username -->
+                <p class="row-value" id="info-username"></p>
+              </div>
+              <button
+                class="btn btn-outline"
+                type="button"
+                data-open-modal="#username-modal"
+              >
+                Update Username
+              </button>
+            </div>
+
+            <!-- update username form -->
+            <div id="username-modal" class="model hidden" data-modal>
+              <div class="model-content profile">
+                <!-- close form -->
+                <img
+                  src="{{url_for('static', filename='assets/icons/close.png')}}"
+                  class="close-form-btn"
+                  data-close-modal
+                />
+                <!-- form -->
+                <form data-form-type="username">
+                  <div class="form-row">
+                    <h1>Update Your Username</h1>
+                  </div>
+
+                  <span class="card-divider"></span>
+
+                  <div class="inputs">
+                    <div class="input form-row">
+                      <p>New Username</p>
+                      <input
+                        type="text"
+                        name="username"
+                        class="field-model"
+                        placeholder="Username"
+                        requird
+                      />
+                    </div>
+                  </div>
+
+                  <span class="card-divider"></span>
+
+                  <div class="form-row">
+                    <button
+                      class="btn-model btn btn-primary profile"
+                      type="submit"
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <span class="card-divider"></span>
+
+            <!-- open email address modal -->
+            <div class="row">
+              <div>
+                <p class="row-label">Email Address</p>
+                <!-- email -->
+                <p class="row-value" id="info-email"></p>
+              </div>
+              <button
+                class="btn btn-outline"
+                type="button"
+                data-open-modal="#email-modal"
+              >
+                Update Email
+              </button>
+            </div>
+
+            <!-- update email form -->
+            <div id="email-modal" class="model hidden" data-modal>
+              <div class="model-content profile">
+                <!-- close form -->
+                <img
+                  src="{{url_for('static', filename='assets/icons/close.png')}}"
+                  class="close-form-btn"
+                  data-close-modal
+                />
+                <!-- form -->
+                <form data-form-type="email">
+                  <div class="form-row">
+                    <h1>Update Your Email Address</h1>
+                  </div>
+
+                  <span class="card-divider"></span>
+
+                  <div class="inputs">
+                    <div class="input form-row">
+                      <p>New Email Address</p>
+                      <input
+                        type="email"
+                        name="email"
+                        class="field-model"
+                        placeholder="Email Address"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <span class="card-divider"></span>
+
+                  <div class="form-row">
+                    <button
+                      class="btn btn-primary btn-model profile"
+                      type="submit"
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <span class="card-divider"></span>
+
+            <!-- open password modal -->
+            <div class="row">
+              <div>
+                <p class="row-label">Password</p>
+                <!-- password -->
+                <p class="row-value">•••••••••</p>
+              </div>
+              <!-- open modal -->
+              <button
+                class="btn btn-outline"
+                type="button"
+                data-open-modal="#password-modal"
+              >
+                Update Password
+              </button>
+            </div>
+
+            <!-- update password form -->
+            <div id="password-modal" class="model hidden" data-modal>
+              <div class="model-content profile">
+                <!-- close form -->
+                <img
+                  src="{{url_for('static', filename='assets/icons/close.png')}}"
+                  class="close-form-btn"
+                  data-close-modal
+                />
+                <!-- form -->
+                <form data-form-type="password">
+                  <div class="form-row">
+                    <h1>Update Your Password</h1>
+                  </div>
+
+                  <span class="card-divider"></span>
+
+                  <div class="inputs form-row">
+                    <!-- error -->
+                    <div id="form-error" class="hidden">
+                      <div id="error" class="error"></div>
+                    </div>
+
+                    <div class="input">
+                      <p>Current Password</p>
+                      <input
+                        type="password"
+                        name="current-password"
+                        placeholder="Password"
+                        class="field-model"
+                        required
+                      />
+                    </div>
+                    <div class="input">
+                      <p>New Password</p>
+                      <input
+                        type="password"
+                        name="new-password"
+                        placeholder="Password"
+                        class="field-model"
+                        required
+                      />
+                    </div>
+
+                    <div class="input">
+                      <p>Confirm Password</p>
+                      <input
+                        type="password"
+                        name="confirm-password"
+                        placeholder="Password"
+                        class="field-model"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <span class="card-divider"></span>
+
+                  <div class="form-row">
+                    <button
+                      class="btn btn-primary btn-model profile"
+                      type="submit"
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div id="toast" class="toast"></div>
     </main>
+
+    <footer class="footer">© 2026 Midnight Library</footer>
 
     <!-- script -->
     <script

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    {% include "partials/_navbar.html" %}
+
+    <!-- main content -->
+    <main class="browse-content">
+      <!-- hero -->
+      <section class="browse-hero">
+        <!-- search bar -->
+        <div class="search-books">
+          <span class="search-icon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </span>
+
+          <input
+            id="search-field"
+            class="search-input"
+            type="input"
+            placeholder="Search books by ISBN, title, author..."
+          />
+
+          <button
+            id="clear-search"
+            class="clear-search-btn hidden"
+            type="button"
+            aria-label="Clear search"
+          >
+            <i class="fas fa-times-circle fa-lg"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- content -->
+      <section class="books-section">
+        <!-- counters -->
+        <div class="counters">
+          <p class="counter" id="books-count"></p>
+          <p id="page-track"></p>
+        </div>
+
+        <!-- books -->
+        <div class="all-books" id="all-books"></div>
+
+        <div class="empty-state-wrapper hidden">
+          <div class="empty-state">
+            <img
+              src="{{url_for('static', filename='assets/icons/no-results.png')}}"
+              alt=""
+            />
+            <h1>No Books Found</h1>
+            <p>There are no books that matches your current filters.</p>
+            <p></p>
+          </div>
+        </div>
+
+        <!-- pagination -->
+        <div class="pagination" id="pagination">
+          <!-- prev -->
+          <button class="pagination-btn" id="prev-btn" disabled>Prev</button>
+
+          <!-- pages -->
+          <div id="links-container" class="links">
+            <!-- <button class="link active"></button> -->
+          </div>
+
+          <!-- next -->
+          <button class="pagination-btn" id="next-btn">Next</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">© 2026 Midnight Library</footer>
+
+    <!-- script -->
+    <script
+      src="https://kit.fontawesome.com/0fa7007e9e.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/app.js') }}"
+    ></script>
+  </body>
+</html>

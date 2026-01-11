@@ -1,0 +1,105 @@
+/* ========================
+   BUTTONS
+======================== */
+
+/* base */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 500;
+
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* edit */
+
+.btn-edit {
+  background-color: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #cde3ff;
+}
+
+.btn-edit:hover {
+  background-color: #dfe8ff;
+}
+
+/* return */
+
+.btn-return {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.btn-return:hover {
+  background-color: #d1fae5;
+}
+
+/* delete / remove */
+
+.btn-delete {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.btn-delete:hover {
+  background-color: #fee2e2;
+}
+
+/* primary */
+
+.btn-primary {
+  background-color: var(--color-midnight-accent-strong);
+  border: 1px solid var(--color-midnight-accent-strong);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-midnight-accent);
+  border: 1px solid var(--color-midnight-accent);
+}
+
+.btn-primary:focus {
+  background-color: var(--color-midnight-accent-strong);
+}
+
+/* outline */
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--color-midnight-accent);
+  color: var(--color-midnight-accent);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-midnight-accent-strong);
+  color: white;
+}
+
+/* text */
+
+.btn-text {
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
+  background: transparent;
+}
+
+.btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+.btn-full {
+  width: 100%;
+  padding: 0.8rem;
+}

@@ -1,5 +1,6 @@
-from .dependencies.deps import admin_required
 from flask import Blueprint, render_template
+
+from .dependencies.deps import admin_required
 
 admin = Blueprint("admin", __name__)
 

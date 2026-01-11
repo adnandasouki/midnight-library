@@ -1,0 +1,83 @@
+.model {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.model-content {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+
+  border-radius: 15px;
+  background-color: white;
+  text-align: center;
+}
+
+.model-content h1 {
+  color: var(--color-midnight-primary);
+}
+
+.model-content p {
+  color: var(--color-midnight-primary-soft);
+  text-align: start;
+  font-weight: 600;
+}
+
+.form-row {
+  padding: 1rem 1.5rem;
+}
+
+.field-model {
+  padding: 0.8rem;
+  width: 100%;
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.1s ease;
+  font-size: 1rem;
+  caret-color: var(--color-midnight-primary);
+  color: var(--color-midnight-primary);
+}
+
+.field-model:focus {
+  border: 1px solid var(--color-midnight-accent);
+  outline: none;
+}
+
+.field-model::placeholder {
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.model-content .input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.close-form-btn {
+  width: 25px;
+  height: 25px;
+
+  position: absolute;
+  right: 0;
+  transform: translate(10px, -10px);
+
+  cursor: pointer;
+  border-radius: 500px;
+  background-color: transparent;
+}
+
+.btn-model {
+  width: 100%;
+}

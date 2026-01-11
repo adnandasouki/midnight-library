@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import func, or_
+
 from ..models import Book
 
 class BooksRepository:
@@ -42,22 +43,27 @@ class BooksRepository:
         except SQLAlchemyError as e:
             self.db.session.rollback()
             raise e
-
-    def all(self, page=None, per_page=10, q=None):
+        
+    def _base_query(self, q=None):
         query = Book.query
 
         if q:
-            query = query.filter(
-                Book.title.ilike(f"%{q}%") |
-                Book.author.ilike(f"%{q}%") |
-                Book.isbn.ilike(f"%{q}%")
-            )
+            query = query.filter(or_(
+                Book.isbn.ilike(f"%{q}%"),
+                Book.title.ilike(f"%{q}%"),
+                Book.author.ilike(f"%{q}%")
+            ))
+            
+        return query
 
-        if page:
-            return Book.query.paginate(page=page, per_page=per_page, error_out=False)
-        
-        return query.all()
-        
+    def all(self, page=1, per_page=10, q=None):
+        query = self._base_query(q)
+
+        return query.paginate(
+            page=page,
+            per_page=per_page,
+            error_out=False
+        )
 
     def by_id(self, id):
         return Book.query.get(id)

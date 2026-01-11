@@ -1,0 +1,70 @@
+:root {
+  /* Midnight Library palette */
+  --color-midnight-primary: #2c3e50;
+  --color-midnight-primary-soft: #34495e;
+  --color-midnight-accent: #1abc9c;
+  --color-midnight-accent-strong: #16a085;
+  --color-midnight-background: #ecf0f1;
+
+  --color-primary: #2a4d69;
+  --color-primary-light: #4b86b4;
+  --color-accent: #f18f01;
+  --color-accent-light: #eb9c27;
+  --color-background: #f7f9fa;
+  --color-surface: white;
+  --color-text-primary: #1a1a1;
+  --color-text-secondary: #555555;
+  /* --color-success: #4caf50; */
+
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  --color-success: #d4edda;
+  --color-danger: #f8d7da;
+  --color-warning: #fff3cd;
+  --color-alert: #cce5ff;
+
+  /* Typography */
+  --font-size-page-title: 2rem;
+  --font-size-section-header: 1.5rem;
+  --font-size-card-title: 1rem;
+  --font-size-card-text: 0.75rem;
+  --font-size-info: 0.5rem;
+
+  /* Spacing */
+  --space-2: 0.125rem;
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-pill: 999rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  /* transitions */
+  --transition-fast: 120ms;
+  --transition-medium: 120ms;
+  --transition-slow: 300ms;
+
+  /* Fonts */
+  --font-family-inter: "Inter", sans-serif;
+  --font-family-merriweather: "Merriweather", serif;
+}

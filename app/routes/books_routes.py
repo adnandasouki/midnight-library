@@ -1,9 +1,10 @@
 from flask import Blueprint, jsonify, request
+from werkzeug.utils import secure_filename
+import os
+
 from .dependencies.deps import admin_required
 from .dependencies.deps import book_service
-from werkzeug.utils import secure_filename
 from ..extentions import db
-import os
 
 books_routes = Blueprint("books_routes", __name__)
 
@@ -28,7 +29,7 @@ def Add_book():
         IMAGES_FOLDER = os.path.join("app/static/assets/images")
         
         img_name = secure_filename(book_img.filename)
-        # os.makedirs(IMAGES_FOLDER, exist_ok=True)
+        os.makedirs(IMAGES_FOLDER, exist_ok=True)
         book_img.save(os.path.join(IMAGES_FOLDER, img_name))
         
         service.create_book(
@@ -57,24 +58,40 @@ def Add_book():
         traceback.print_exc()
         return jsonify({"type": "error", "msg": str(e)}), 500
 
-# get all books
+# get all books for admin
+@books_routes.route("/admin")
+def books_for_admin():
+    service = book_service(db)
+
+    books = service.get_all_for_admin()
+
+    return jsonify([b.to_json() for b in books])
+
+# get all books (paginated)
 @books_routes.route("/all", methods=["GET"])
 def get_books():
         try:
             service = book_service(db)
             
+            # pagination query
             page = request.args.get("page", type=int)
-            per_page = request.args.get("per_page", default=10, type=int)
+            per_page = request.args.get("per_page", default=8, type=int)
+
+            # search query
             q = request.args.get("q", type=str)
 
-            books = service.get_all_books(page=page, per_page=per_page, q=q)
+            books = service.get_all_books(
+                page=page,
+                per_page=per_page,
+                q=q
+            )
             
             # with pagination
             if page:
                  return jsonify({
                      "current_page": books.page,
                      "items_per_page": books.per_page,
-                     "total_item": books.total,
+                     "total_items": books.total,
                      "total_pages": books.pages,
                      "books": [b.to_json() for b in books.items]
                  }), 200
@@ -85,6 +102,7 @@ def get_books():
                 "id": book.id,
                 "isbn": book.isbn,
                 "title": book.title,
+                "subtitle": book.subtitle,
                 "author": book.author,
                 "page_count": book.page_count,
                 "language": book.language,

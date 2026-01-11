@@ -9,44 +9,20 @@ import * as utils from "./utils.js";
 
 export const HomePageController = {
   async init() {
-    const q = utils.Url.get("q");
+    this.books = await services.BookService.loadAll();
 
     views.HomePageView.init({
-      onSearch: this.handleSearch.bind(this),
-      onClearSearch: this.handleClearSearch.bind(this),
+      books: this.books,
+      onSubmit: this.handleSearch.bind(this),
     });
-
-    views.HomePageView.setSearchValue(q);
-
-    await this.loadBooks(q);
   },
 
-  async handleSearch(search) {
-    if (search) {
-      utils.Url.set({ q: search });
-    } else {
-      utils.Url.set({ q: null });
-    }
+  handleSearch(q) {
+    const url = new URL("/browse", window.location.origin);
+    url.searchParams.set("q", q);
+    url.searchParams.set("page", 1);
 
-    await this.loadBooks(search);
-  },
-
-  async handleClearSearch() {
-    utils.Url.set({ q: null });
-    views.HomePageView.setSearchValue();
-    await this.loadBooks(this.visibleBooks);
-  },
-
-  async loadBooks(query) {
-    let books;
-
-    if (!query) {
-      books = await services.BookService.loadAll();
-    } else {
-      books = await services.BookService.search({ q: query });
-    }
-
-    views.HomePageView.renderBooks(books);
+    window.location.href = url.toString();
   },
 };
 
@@ -57,7 +33,7 @@ export const HomePageController = {
 export const BookDetailsController = {
   async init() {
     // Book
-    this.book = await services.BookService.getById(
+    this.book = await services.BookService.loadById(
       Number(window.location.pathname.split("/").pop())
     );
 
@@ -126,13 +102,69 @@ export const ProfileController = {
     this.profile = await services.UserService.loadProfile();
 
     views.ProfileView.init({
+      profile: this.profile,
       onReturnClicked: this.handleReturn.bind(this),
       onRemoveFavoriteClicked: this.handleRemoveFavorite.bind(this),
+      onUpdateUsername: this.handleUsernameUpdate.bind(this),
+      onUpdateEmail: this.handleEmailUpdate.bind(this),
+      onPasswordUpdate: this.handlePasswordUpdate.bind(this),
     });
-
-    views.ProfileView.render(this.profile);
   },
 
+  // username update
+  async handleUsernameUpdate(form) {
+    const formData = new FormData(form);
+    const { response, data } = await services.UserService.updateUser(formData);
+
+    if (response.ok) {
+      utils.UI.showToast(data.msg, data.type);
+
+      // Reload profile
+      const refreshedProfile = await services.UserService.loadProfile();
+      views.ProfileView.render(refreshedProfile);
+
+      form.closest("[data-modal]").classList.add("hidden");
+    } else {
+      utils.UI.showToast(data.msg, data.type);
+    }
+  },
+
+  // email update
+  async handleEmailUpdate(form) {
+    const formData = new FormData(form);
+    const { response, data } = await services.UserService.updateUser(formData);
+
+    if (response.ok) {
+      utils.UI.showToast(data.msg, data.type);
+
+      // Reload profile
+      const refreshedProfile = await services.UserService.loadProfile();
+      views.ProfileView.render(refreshedProfile);
+
+      form.closest("[data-modal]").classList.add("hidden");
+    } else {
+      utils.UI.showToast(data.msg, data.type);
+    }
+  },
+
+  // password update
+  async handlePasswordUpdate(form) {
+    const formData = new FormData(form);
+    const { response, data } = await services.UserService.updatePassword(
+      formData
+    );
+
+    if (response.ok) {
+      utils.UI.showToast(data.msg, data.type);
+      form.closest("[data-modal]").classList.add("hidden");
+    }
+    if (response.status === 400) {
+      // error msg
+      views.ProfileView.renderErrorMsg(data.msg);
+    }
+  },
+
+  // return book
   async handleReturn(borrowingId) {
     const { response, data } = await services.BorrowingService.returnBook(
       borrowingId
@@ -145,12 +177,8 @@ export const ProfileController = {
       // Reload profile
       const refreshedProfile = await services.UserService.loadProfile();
 
-      const refreshedBorrowings = refreshedProfile.all_borrowings.filter(
-        (b) => (b.status === "active") | (b.status === "overdue")
-      );
-
       // Reload active borrowings
-      views.ProfileView.renderActiveBorrowings(refreshedBorrowings);
+      views.ProfileView.renderActiveBorrowings(refreshedProfile);
 
       const refreshedHistory = refreshedProfile.all_borrowings.filter(
         (b) => b.status === "returned"
@@ -164,6 +192,7 @@ export const ProfileController = {
     }
   },
 
+  // remove favorite book
   async handleRemoveFavorite(favId) {
     const { response, data } = await services.Api.request("/favorites/delete", {
       method: "DELETE",
@@ -178,7 +207,7 @@ export const ProfileController = {
       const refreshedProfile = await services.UserService.loadProfile();
 
       // Reload profile
-      views.ProfileView.renderFavorites(refreshedProfile.favorites);
+      views.ProfileView.renderFavorites(refreshedProfile);
     } else if (response.status === 400) {
       // Show error toast notification
       utils.UI.showToast(data.msg, data.type);
@@ -194,7 +223,7 @@ export const AdminController = {
   async init() {
     this.borrowings = await services.BorrowingService.loadAll();
     this.users = await services.UserService.loadAll();
-    this.books = await services.BookService.loadAll();
+    this.books = await services.BookService.loadForAdmin();
     this.activities = await services.ActivityService.loadRecent();
 
     views.AdminView.init();
@@ -230,17 +259,16 @@ export const ManageBooksController = {
   visibleBooks: [],
 
   async init() {
-    this.allBooks = await services.BookService.loadAll();
+    this.allBooks = await services.BookService.loadForAdmin();
     this.visibleBooks = [...this.allBooks];
 
     views.ManageBooksView.init({
+      books: this.visibleBooks,
       onSearch: this.handleSearch.bind(this),
+      onDeleteBookClicked: this.handleDeleteBook.bind(this),
       onAddBookSubmit: this.handleAddBook.bind(this),
-      onEditBookClicked: this.handleEditBookModel.bind(this),
       onEditBookSubmit: this.handleEditBook.bind(this),
     });
-
-    views.ManageBooksView.renderBooksTable(this.visibleBooks);
   },
 
   handleSearch(query) {
@@ -264,27 +292,17 @@ export const ManageBooksController = {
 
   async handleAddBook(form) {
     const formData = new FormData(form);
-
     const { response, data } = await services.BookService.addBook(formData);
 
     utils.UI.showToast(data.msg, data.type);
 
     if (response.status === 201) {
-      await BookService.loadAll();
-      views.ManageBooksView.renderBooksTable(this.visibleBooks);
-      views.ManageBooksView.closeAddBookModel();
-      views.ManageBooksView.resetAddBookForm();
+      this.init();
     }
   },
 
-  async handleEditBookModel(bookId) {
-    const book = await services.BookService.getById(bookId);
-    if (!book) return;
-
-    views.ManageBooksView.openEditBookModel(book);
-  },
-
-  async handleEditBook(bookId, formData) {
+  async handleEditBook(bookId, form) {
+    const formData = new FormData(form);
     const { response, data } = await services.BookService.updateBook(
       bookId,
       formData
@@ -293,9 +311,7 @@ export const ManageBooksController = {
     utils.UI.showToast(data.msg, data.type);
 
     if (response.status === 200) {
-      await BookService.loadAll();
-      views.ManageBooksView.renderBooksTable(this.visibleBooks);
-      views.ManageBooksView.closeEditBookModel();
+      this.init();
     }
   },
 
@@ -324,7 +340,7 @@ export const ManageUsersController = {
 
     views.ManageUsersView.init({
       onSearch: this.handleSearch.bind(this),
-      onEditUserClicked: this.handleEditModel.bind(this),
+      onEditUserModalOpen: this.handleEditUserModal.bind(this),
       onEditUserSubmit: this.handleEditUser.bind(this),
       onAddUserSubmit: this.handleAddUser.bind(this),
       onDeleteUserClicked: this.handleDeleteUser.bind(this),
@@ -350,14 +366,15 @@ export const ManageUsersController = {
     views.ManageUsersView.renderUsersTable(this.visibleUsers);
   },
 
-  async handleEditModel(userId) {
+  async handleEditUserModal(userId) {
     const user = await services.UserService.loadById(userId);
     if (!user) return;
 
-    views.ManageUsersView.openEditModel(user);
+    views.ManageUsersView.initEditUserModal(user);
   },
 
-  async handleEditUser(userId, formData) {
+  async handleEditUser(userId, form) {
+    const formData = new FormData(form);
     const { response, data } = await services.UserService.updateUser(
       userId,
       formData
@@ -365,9 +382,9 @@ export const ManageUsersController = {
 
     if (response.status === 200) {
       utils.UI.showToast(data.msg, data.type);
-      await services.UserService.loadAll();
-      views.ManageUsersView.renderUsersTable(this.visibleUsers);
-      views.ManageUsersView.closeEditModel();
+      views.ManageUsersView.closeVisibleModal();
+      const refreshed = await services.UserService.loadAll();
+      views.ManageUsersView.renderUsersTable(refreshed);
     } else {
       utils.UI.showToast(data.msg, data.type);
     }
@@ -375,7 +392,7 @@ export const ManageUsersController = {
 
   async handleAddUser(form) {
     const formData = new FormData(form);
-    const { response, data } = await services.UserService.addUser(formData);
+    const { response, data } = await services.UserService.createUser(formData);
 
     utils.UI.showToast(data.msg, data.type);
 
@@ -468,22 +485,45 @@ export const SignUpController = {
       onSignUpClick: this.signUp.bind(this),
       onGoogleAuthClicked: this.handleGoogleAuth.bind(this),
     });
+
+    window.addEventListener("pageshow", (e) => {
+      if (e.persisted) {
+        views.SignUpView.resetGoogleLoading();
+        views.SignUpView.hideError();
+      }
+    });
   },
-  // LOCAL SIGN UP
+  // local
   async signUp(form) {
     const formData = new FormData(form);
-    const { response, data } = await services.AuthService.signUp(formData);
 
-    if (response.status === 201) {
-      window.location.href = "/";
-    } else {
-      console.log(data.error);
+    // start lodaing
+    views.SignUpView.showLoading();
+
+    try {
+      // request
+      const { response, data } = await services.AuthService.signUp(formData);
+
+      if (response.status === 201) {
+        window.location.href = "/";
+      } else {
+        views.SignUpView.showError(data.msg);
+      }
+    } catch (e) {
+      // error
+    } finally {
+      // hide loading
+      views.SignUpView.hideLodaing();
     }
   },
 
-  // GOOGLE AUTH
+  // google
   handleGoogleAuth() {
-    window.location.href = "/api/user/create/google";
+    views.SignUpView.showGoogleLoading();
+
+    requestAnimationFrame(() => {
+      window.location.href = "/api/auth/google";
+    });
   },
 };
 
@@ -497,25 +537,47 @@ export const SignInController = {
       onSignInClick: this.signIn.bind(this),
       onGoogleAuthClicked: this.handleGoogleAuth.bind(this),
     });
+
+    window.addEventListener("pageshow", (e) => {
+      if (e.persisted) {
+        views.SignInView.resetGoogleLoading();
+        views.SignInView.hideError();
+      }
+    });
   },
   async signIn(form) {
     const formData = new FormData(form);
-    const { response, data } = await services.AuthService.signIn(formData);
 
-    if (response.ok) {
-      if (data.user.is_admin) {
-        window.location.href = "/admin";
+    // start loading
+    views.SignInView.showLoading();
+
+    try {
+      // request
+      const { response, data } = await services.AuthService.signIn(formData);
+
+      if (response.status === 200) {
+        if (data.user.is_admin) {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/";
+        }
       } else {
-        window.location.href = "/";
+        views.SignInView.showError(data.msg);
       }
-    } else {
-      alert(response.error);
+    } catch (e) {
+      // error
+    } finally {
+      // stop loading
+      views.SignInView.hideLoading();
     }
   },
 
-  // GOOGLE AUTH
   handleGoogleAuth() {
-    window.location.href = "/api/user/create/google";
+    views.SignInView.showGoogleLoading();
+
+    requestAnimationFrame(() => {
+      window.location.href = "/api/auth/google";
+    });
   },
 };
 
@@ -579,5 +641,75 @@ export const NavbarController = {
   handleSignOut() {
     services.AuthService.signOut();
     window.location.href = "/signin";
+  },
+};
+
+/* ========================
+   BROWSE BOOKS
+======================== */
+
+export const BrowseBookController = {
+  async init() {
+    this.data = await services.BookService.loadAll();
+
+    this.getSearchParams();
+
+    views.BrowseBookView.init({
+      data: this.data,
+      onSearch: this.handleSearch.bind(this),
+      onClearSearch: this.handleClearSearch.bind(this),
+      onPageChange: this.handlePageChange.bind(this),
+    });
+  },
+
+  async getSearchParams() {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q") || "";
+    const page = params.get("page") || 1;
+
+    await services.BookService.loadAll();
+
+    views.BrowseBookView.setSearchValue(q);
+    views.BrowseBookView.focusSearch();
+  },
+
+  async handlePageChange(page) {
+    console.log(page);
+    if (page < 1) return;
+
+    const url = new URL(window.location);
+    url.searchParams.set("page", page);
+    window.history.pushState({}, "", url);
+
+    const data = await services.BookService.loadAll();
+    views.BrowseBookView.render(data, this.handlePageChange.bind(this));
+  },
+
+  async handleSearch(q) {
+    // set param value
+    const url = new URL(window.location);
+    url.searchParams.set("q", q);
+    url.searchParams.set("page", 1);
+
+    // push to url
+    window.history.pushState({}, "", url);
+
+    // render
+    const searched = await services.BookService.loadAll();
+    views.BrowseBookView.render(searched);
+  },
+
+  async handleClearSearch() {
+    // 1. reset url q value
+    const url = new URL(window.location);
+    url.searchParams.set("q", "");
+    window.history.pushState({}, "", url);
+
+    // 2. reset search input
+    views.BrowseBookView.setSearchValue();
+
+    // 3. relaod books
+    const books = await services.BookService.loadAll();
+    views.BrowseBookView.render(books);
   },
 };

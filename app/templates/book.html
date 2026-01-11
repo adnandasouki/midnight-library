@@ -16,209 +16,108 @@
     />
   </head>
   <body>
-    <!-- navbar -->
-    <nav class="navbar">
-      <div class="navbar-wrapper">
-        <!-- brand -->
-        <a href="/" class="navbar-brand">
-          <img
-            src="{{ url_for('static', filename='assets/brand.svg') }}"
-            alt="brand"
-          />
-          <span>Library System</span>
-        </a>
-
-        <!-- avatar -->
-        <div class="navbar-buttons" id="auth-buttons">
-          <div class="avatar-dropdown hidden" id="avatar-dropdown">
-            <button
-              id="avatar-nav-btn"
-              class="avatar-sm"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span id="avatar-letter"></span>
-            </button>
-
-            <ul id="avatar-menu" class="avatar-menu" role="menu">
-              <!-- admin -->
-              <li class="menu-item hidden" id="overview-link" role="menuitem">
-                <a href="/admin" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/overview.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Overview</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-books-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-books" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/books.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Books</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-users-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-users" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/users.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Users</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-borrowings-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-borrowings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/borrowings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Borrowings</span></a
-                >
-              </li>
-              <!-- user -->
-              <li class="menu-item hidden" id="profile-link" role="menuitem">
-                <a href="/user/profile" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/profile.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Profile</span>
-                </a>
-              </li>
-              <li class="menu-item hidden" id="settings-link" role="menuitem">
-                <a href="/user/settings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/settings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Settings</span>
-                </a>
-              </li>
-              <li class="divider" role="separator"></li>
-              <li class="menu-item" role="menuitem">
-                <button class="btn-text" id="signout-btn">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/signout.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Sign out</span>
-                </button>
-              </li>
-            </ul>
-          </div>
-          <!-- guest -->
-          <button id="signin-btn" class="btn btn-outline hidden">
-            Sign in
-          </button>
-          <button id="signup-btn" class="btn btn-primary hidden">
-            Sign up
-          </button>
-        </div>
-      </div>
-    </nav>
+    {% include "partials/_navbar.html" %}
 
     <main class="book-page">
       <div id="toast" class="toast"></div>
-      <!-- details -->
-      <section class="book-details card-md">
-        <!-- img & availabilty badge -->
-        <div class="img-availability">
-          <img class="book-details-img" id="book-img" />
-          <span id="book-status"></span>
-        </div>
 
-        <!-- metadata & acitons -->
-        <div class="book-info">
-          <!-- metadata -->
-          <div class="book-meta">
-            <h3 id="book-title"></h3>
-            <div class="meta-row">
-              <span class="meta-label">ISBN</span>
-              <span class="meta-colon">:</span>
-              <span class="meta-value" id="book-isbn"></span>
-            </div>
-
-            <div class="meta-row">
-              <span class="meta-label">Author</span>
-              <span class="meta-colon">:</span>
-              <span class="meta-value" id="book-author"></span>
-            </div>
-
-            <div class="meta-row">
-              <span class="meta-label">Language</span>
-              <span class="meta-colon">:</span>
-              <span class="meta-value" id="book-language"></span>
-            </div>
-
-            <div class="meta-row">
-              <span class="meta-label">Pages</span>
-              <span class="meta-colon">:</span>
-              <span class="meta-value" id="book-pages"></span>
-            </div>
-
-            <div class="meta-row">
-              <span class="meta-label">Publisher</span>
-              <span class="meta-colon">:</span>
-              <span class="meta-value" id="book-publisher"></span>
-            </div>
-
-            <div class="meta-row">
-              <span class="meta-label">Published</span>
-              <span class="meta-colon">:</span>
-              <span class="meta-value" id="book-published"></span>
-            </div>
+      <!-- hero -->
+      <section class="book-hero-section">
+        <!-- brief and actions -->
+        <div class="brief-wrapper">
+          <div class="brief-texts">
+            <h1 id="book-title"></h1>
+            <h3 id="book-subtitle"></h3>
+            <span
+              >By <span id="by-author"></span> - <span id="published"></span
+            ></span>
           </div>
 
           <!-- buttons -->
           <div class="book-actions">
-            <!-- borrow -->
-            <button type="button" class="btn btn-outline" id="borrow-btn">
-              Borrow Book
+            <button type="button" class="btn btn-primary" id="borrow-btn">
+              <img
+                src="{{url_for('static', filename='assets/icons/borrow-2.png')}}"
+              />
+              <span>Borrow</span>
             </button>
-            <!-- favorites -->
+
             <button type="button" class="btn btn-outline" id="favorite-btn">
+              <img
+                src="{{url_for('static', filename='assets/icons/favorite.png')}}"
+              />
               Add to Favorites
             </button>
           </div>
         </div>
+
+        <!-- cover -->
+        <div class="img-availability">
+          <img class="book-details-img" id="book-img" />
+          <span id="book-status"></span>
+        </div>
       </section>
 
-      <!-- description -->
-      <section class="book-description-card card-md">
-        <h4>Book Description</h4>
-        <span>_____</span>
-        <p id="book-description" class="description"></p>
+      <!-- content -->
+      <section class="book-details-content">
+        <section class="book-details card-md">
+          <!-- metadata & acitons -->
+          <div class="book-info">
+            <div class="book-details-header">
+              <h4>About the book</h4>
+              <span>_____</span>
+            </div>
+            <!-- metadata -->
+            <div class="book-meta">
+              <div class="meta-row">
+                <span class="meta-label">ISBN</span>
+                <span class="meta-colon">:</span>
+                <span class="meta-value" id="book-isbn"></span>
+              </div>
+
+              <div class="meta-row">
+                <span class="meta-label">Author</span>
+                <span class="meta-colon">:</span>
+                <span class="meta-value" id="book-author"></span>
+              </div>
+
+              <div class="meta-row">
+                <span class="meta-label">Language</span>
+                <span class="meta-colon">:</span>
+                <span class="meta-value" id="book-language"></span>
+              </div>
+
+              <div class="meta-row">
+                <span class="meta-label">Pages</span>
+                <span class="meta-colon">:</span>
+                <span class="meta-value" id="book-pages"></span>
+              </div>
+
+              <div class="meta-row">
+                <span class="meta-label">Publisher</span>
+                <span class="meta-colon">:</span>
+                <span class="meta-value" id="book-publisher"></span>
+              </div>
+
+              <div class="meta-row">
+                <span class="meta-label">Published</span>
+                <span class="meta-colon">:</span>
+                <span class="meta-value" id="book-published"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- description -->
+        <section class="book-description-card card-md">
+          <h4>Book description</h4>
+          <span>_____</span>
+          <p id="book-description" class="description"></p>
+        </section>
       </section>
     </main>
+
+    <footer class="footer">© 2026 Midnight Library</footer>
 
     <!-- script -->
     <script

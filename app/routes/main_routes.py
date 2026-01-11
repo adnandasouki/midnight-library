@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+
 from .dependencies.deps import signin_required
 
 main = Blueprint("main", __name__)
@@ -6,6 +7,10 @@ main = Blueprint("main", __name__)
 @main.route('/')
 def main_page():
     return render_template("index.html")
+
+@main.route('/browse')
+def browse():
+    return render_template("browse_books.html")
 
 @main.route('/books/<int:id>')
 def book_details_page(id):

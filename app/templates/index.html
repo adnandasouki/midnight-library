@@ -16,167 +16,126 @@
     />
   </head>
   <body>
-    <!-- navbar -->
-    <nav class="navbar">
-      <div class="navbar-wrapper">
-        <!-- brand -->
-        <a href="/" class="navbar-brand">
-          <img
-            src="{{ url_for('static', filename='assets/brand.svg') }}"
-            alt="brand"
-          />
-          <span>Library System</span>
-        </a>
-
-        <!-- avatar -->
-        <div class="navbar-buttons" id="auth-buttons">
-          <div class="avatar-dropdown hidden" id="avatar-dropdown">
-            <button
-              id="avatar-nav-btn"
-              class="avatar-sm"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span id="avatar-letter"></span>
-            </button>
-
-            <ul id="avatar-menu" class="avatar-menu" role="menu">
-              <!-- admin -->
-              <li class="menu-item hidden" id="overview-link" role="menuitem">
-                <a href="/admin" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/overview.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Overview</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-books-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-books" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/books.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Books</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-users-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-users" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/users.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Users</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-borrowings-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-borrowings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/borrowings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Borrowings</span></a
-                >
-              </li>
-              <!-- user -->
-              <li class="menu-item hidden" id="profile-link" role="menuitem">
-                <a href="/user/profile" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/profile.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Profile</span>
-                </a>
-              </li>
-              <li class="menu-item hidden" id="settings-link" role="menuitem">
-                <a href="/user/settings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/settings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Settings</span>
-                </a>
-              </li>
-              <li class="divider" role="separator"></li>
-              <li class="menu-item" role="menuitem">
-                <button class="btn-text" id="signout-btn">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/signout.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Sign out</span>
-                </button>
-              </li>
-            </ul>
-          </div>
-          <!-- guest -->
-          <button id="signin-btn" class="btn btn-outline hidden">
-            Sign in
-          </button>
-          <button id="signup-btn" class="btn btn-primary hidden">
-            Sign up
-          </button>
-        </div>
-      </div>
-    </nav>
+    {% include "partials/_navbar.html" %}
 
     <!-- main content -->
     <main class="homepage-content">
-      <!-- search field -->
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <span class="search-icon">🔍</span>
-          <!-- input -->
-          <input
-            id="search-field"
-            class="search-all-field"
-            type="input"
-            placeholder="Search by isbn, title or author"
+      <!-- hero section -->
+      <div class="hero-section">
+        <!-- header -->
+        <div class="hero-section-header">
+          <img
+            src="{{ url_for('static', filename='assets/logos/brand.png') }}"
+            class="brand-lg"
           />
-          <!-- clear -->
-          <button
-            id="clear-search"
-            class="clear-search-btn"
-            type="button"
-            aria-label="Clear search"
-          >
-            x
-          </button>
-          <!-- button -->
-          <!-- <button id="search-btn" type="button">Search</button> -->
+          <h1>Midnight Library</h1>
+          <h2>Explore. Borrow.</h2>
+          <h2>Read.</h2>
+          <p>Explore and manage your reading world</p>
+        </div>
+        <div class="search-wrapper">
+          <!-- search bar -->
+          <form id="home-search-form" class="search-books">
+            <span class="search-icon">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input
+              id="home-search-input"
+              class="search-input"
+              name="q"
+              type="input"
+              placeholder="Find a book..."
+            />
+          </form>
         </div>
       </div>
-      <!-- books list -->
-      <div class="all-books" id="books"></div>
+
+      <div class="content">
+        <div class="intro">
+          <!-- explore -->
+          <div class="intro-item card-md">
+            <div class="intro-img-wrapper">
+              <img
+                src="{{url_for('static', filename='assets/homepage/explore.png')}}"
+                alt="Explore"
+              />
+            </div>
+            <div class="intro-texts-wrapper">
+              <h1>Explore</h1>
+              <p>
+                Browse book that align with your interest to expand your
+                knowledge.
+              </p>
+            </div>
+          </div>
+
+          <!-- borrow -->
+          <div class="intro-item card-md">
+            <div class="intro-img-wrapper">
+              <img
+                src="{{url_for('static', filename='assets/homepage/borrow.png')}}"
+                alt="Explore"
+              />
+            </div>
+            <div class="intro-texts-wrapper">
+              <h1>Borrow</h1>
+              <p>Borrow the desired book freely and enjoy.</p>
+            </div>
+          </div>
+
+          <!-- Favorite -->
+          <div class="intro-item card-md">
+            <div class="intro-img-wrapper">
+              <img
+                src="{{url_for('static', filename='assets/homepage/favorite.png')}}"
+                alt="Explore"
+              />
+            </div>
+            <div class="intro-texts-wrapper">
+              <h1>Favorite</h1>
+              <p>
+                Create your collection of favorited books you have read and
+                liked.
+              </p>
+            </div>
+          </div>
+
+          <!-- Return -->
+          <div class="intro-item card-md">
+            <div class="intro-img-wrapper">
+              <img
+                src="{{url_for('static', filename='assets/homepage/return.png')}}"
+                alt="Explore"
+              />
+            </div>
+            <div class="intro-texts-wrapper">
+              <h1>Return</h1>
+              <p>
+                After finishing reading the book return it to explore and borrow
+                new books!.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- featured books -->
+        <div class="featured">
+          <div class="featured-texts-wrapper">
+            <span>An interesting collection</span>
+            <h1>Featured Books</h1>
+            <p>Some of the interesting books that exists in the library</p>
+          </div>
+          <div id="featured-books" class="all-books featured"></div>
+        </div>
+      </div>
     </main>
+    <footer class="footer">© 2026 Midnight Library</footer>
 
     <!-- script -->
+    <script
+      src="https://kit.fontawesome.com/0fa7007e9e.js"
+      crossorigin="anonymous"
+    ></script>
     <script
       type="module"
       src="{{ url_for('static', filename='js/app.js') }}"

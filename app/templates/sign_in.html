@@ -17,22 +17,30 @@
   </head>
   <body>
     <main class="auth-page">
+      <!-- card -->
       <section class="auth-card card-md">
-        <!-- LOCAL SIGN IN -->
+        <!-- form -->
         <form id="signin-form" class="auth-form">
+          <!-- header -->
           <header class="auth-header">
+            <!-- brand -->
             <a href="/">
-              <div class="navbar-brand">
+              <div class="form-brand">
                 <img
-                  src="{{ url_for('static', filename='assets/brand.svg') }}"
+                  src="{{ url_for('static', filename='assets/logos/brand.png') }}"
                   alt="brand"
                 />
-                <span>Library System</span>
+                <span>Midnight Library</span>
               </div>
             </a>
-            <h3>Sign In</h3>
-            <p>Sign in to your account</p>
+            <!-- texts -->
+            <div class="form-header-texts">
+              <h3>Sign In</h3>
+              <p>Sign in to your account</p>
+            </div>
           </header>
+
+          <div class="error hidden"></div>
 
           <!-- inputs -->
           <div class="auth-fields">
@@ -53,7 +61,8 @@
 
           <!-- submit -->
           <button type="submit" class="btn btn-primary btn-full">
-            Sign In
+            <span class="submit-text">Sign In</span>
+            <span class="spinner hidden"></span>
           </button>
         </form>
 
@@ -62,7 +71,7 @@
           <span>or</span>
         </div>
 
-        <!-- LING TO SIGN UP -->
+        <!-- LINK TO SIGN UP -->
         <div class="has-account">
           <p>Don't have an account? <a href="/signup">Sign up</a></p>
         </div>
@@ -75,12 +84,15 @@
         <!-- GOOGLE AUTH -->
         <div class="oauth-section">
           <button id="oauth-google" class="btn btn-outline" type="button">
-            <img
-              src="/static/assets/google-icon.svg"
-              class="btn-icon"
-              alt="Google"
-            />
-            <span>Continue with Google</span>
+            <span class="spinner google hidden"></span>
+            <div class="oauth-btn-content">
+              <img
+                src="/static/assets/logos/google.svg"
+                class="btn-icon"
+                alt="Google"
+              />
+              <span>Sign in with Google</span>
+            </div>
           </button>
         </div>
 

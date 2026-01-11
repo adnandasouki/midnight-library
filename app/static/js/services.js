@@ -55,33 +55,22 @@ export const AuthService = {
     return data.user;
   },
 
-  // Create a new account
   async signUp(formData) {
     const { response, data } = await Api.request("/auth/signup", {
       method: "POST",
       body: formData,
     });
-
-    if (response.status === 201) {
-      return { response, data };
-    }
     return { response, data };
   },
 
-  // Sign in
   async signIn(formData) {
     const { response, data } = await Api.request("/auth/signin", {
       method: "POST",
       body: formData,
     });
-
-    if (!response.ok) {
-      return response.error || "Signin failed";
-    }
     return { response, data };
   },
 
-  // Sign out
   async signOut() {
     const res = await Api.request("/auth/signout", { method: "POST" });
     console.log(res.data);
@@ -95,16 +84,27 @@ export const AuthService = {
 ======================== */
 
 export const BookService = {
-  async loadAll() {
-    const { response, data } = await Api.request("/books/all", {
+  async loadForAdmin() {
+    const { response, data } = await Api.request("/books/admin", {
       method: "GET",
     });
 
-    if (response.status === 200) {
-      return data;
-    }
+    if (response.ok) return data;
+    return null;
+  },
 
-    return [];
+  async loadAll() {
+    const params = new URLSearchParams(window.location.search);
+
+    const { response, data } = await Api.request(
+      `/books/all?${params.toString()}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (response.ok) return data;
+    return null;
   },
 
   // Load all books by search
@@ -122,15 +122,13 @@ export const BookService = {
     return [];
   },
 
-  // Read all books from local storage
-  getAll() {
-    return LMS_Storage.get(CONFIG.BOOKS_KEY) || [];
-  },
-
-  // Read book by id
-  getById(bookId) {
-    const books = this.getAll();
-    return books.find((book) => book.id === bookId);
+  // Load book by id
+  async loadById(bookId) {
+    const { response, data } = await Api.request(`/books/${bookId}`, {
+      method: "GET",
+    });
+    if (!response.ok) return;
+    return data;
   },
 
   // Add book
@@ -249,8 +247,8 @@ export const UserService = {
     return [];
   },
 
-  async loadById() {
-    const { response, data } = await Api.request("/user/current", {
+  async loadById(userId) {
+    const { response, data } = await Api.request(`/user/${userId}`, {
       method: "GET",
     });
     if (!response.ok) return null;
@@ -274,8 +272,17 @@ export const UserService = {
     return { response, data };
   },
 
-  async updateUser(userId, formData) {
-    const { response, data } = await Api.request(`/user/update/${userId}`, {
+  async updateUser(formData) {
+    const { response, data } = await Api.request(`/user/update`, {
+      method: "PATCH",
+      body: formData,
+    });
+
+    return { response, data };
+  },
+
+  async updatePassword(formData) {
+    const { response, data } = await Api.request("/user/update/password", {
       method: "PATCH",
       body: formData,
     });

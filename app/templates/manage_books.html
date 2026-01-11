@@ -16,370 +16,70 @@
     />
   </head>
   <body>
-    <!-- navbar -->
-    <nav class="navbar">
-      <div class="navbar-wrapper">
-        <!-- brand -->
-        <a href="/" class="navbar-brand">
-          <img
-            src="{{ url_for('static', filename='assets/brand.svg') }}"
-            alt="brand"
-          />
-          <span>Library System</span>
-        </a>
-
-        <!-- avatar -->
-        <div class="navbar-buttons" id="auth-buttons">
-          <div class="avatar-dropdown hidden" id="avatar-dropdown">
-            <button
-              id="avatar-nav-btn"
-              class="avatar-sm"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span id="avatar-letter"></span>
-            </button>
-
-            <ul id="avatar-menu" class="avatar-menu" role="menu">
-              <!-- admin -->
-              <li class="menu-item hidden" id="overview-link" role="menuitem">
-                <a href="/admin" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/overview.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Overview</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-books-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-books" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/books.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Books</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-users-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-users" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/users.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Users</span>
-                </a>
-              </li>
-              <li
-                class="menu-item hidden"
-                id="manage-borrowings-link"
-                role="menuitem"
-              >
-                <a href="/admin/manage-borrowings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/borrowings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Borrowings</span></a
-                >
-              </li>
-              <!-- user -->
-              <li class="menu-item hidden" id="profile-link" role="menuitem">
-                <a href="/user/profile" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/profile.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Profile</span>
-                </a>
-              </li>
-              <li class="menu-item hidden" id="settings-link" role="menuitem">
-                <a href="/user/settings" class="btn-text">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/settings.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Settings</span>
-                </a>
-              </li>
-              <li class="divider" role="separator"></li>
-              <li class="menu-item" role="menuitem">
-                <button class="btn-text" id="signout-btn">
-                  <img
-                    src="{{ url_for('static', filename='assets/icons/signout.png') }}"
-                    alt="profile"
-                    width="20px"
-                    height="20px"
-                  />
-                  <span>Sign out</span>
-                </button>
-              </li>
-            </ul>
-          </div>
-          <!-- guest -->
-          <button id="signin-btn" class="btn btn-outline hidden">
-            Sign in
-          </button>
-          <button id="signup-btn" class="btn btn-primary hidden">
-            Sign up
-          </button>
-        </div>
-      </div>
-    </nav>
-
-    <!-- add book model -->
-    <div id="add-book-model" class="model hidden">
-      <div class="model-content">
-        <h2>Add Book</h2>
-        <!-- add book form -->
-        <form class="add-book-form" id="add-book-form">
-          <div class="book-form-fields">
-            <input
-              class="field-model"
-              type="text"
-              name="isbn"
-              placeholder="ISBN"
-              required
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="title"
-              placeholder="Title"
-              required
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="subtitle"
-              placeholder="Subtitle"
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="author"
-              placeholder="Author"
-              required
-            />
-            <input
-              class="field-model"
-              type="number"
-              name="page_count"
-              placeholder="Pages"
-              required
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="language"
-              placeholder="Language"
-              required
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="publisher"
-              placeholder="Publisher"
-              required
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="published_at"
-              placeholder="Published Date"
-            />
-            <input
-              class="field-model"
-              type="number"
-              name="total_copies"
-              placeholder="Total Copies"
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="description"
-              placeholder="Description"
-            />
-          </div>
-
-          <!-- img -->
-          <label class="file-upload">
-            <input
-              class="form-img-file"
-              id="add-form-img-file"
-              type="file"
-              name="book_img"
-              accept="image/*"
-              required
-              hidden
-            />
-            <span class="file-btn">Upload cover</span>
-            <span class="file-name" id="add-book-file-name"
-              >No file selected</span
-            >
-          </label>
-
-          <!-- submit -->
-          <div class="model-buttons">
-            <button class="btn-model" type="button" id="close-add-model">
-              Cancel
-            </button>
-            <button class="btn-model" type="submit">Add Book</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- edit book model -->
-    <div id="edit-book-model" class="model hidden">
-      <div class="model-content">
-        <h2>Edit Book</h2>
-        <!-- edit book form -->
-        <form class="add-book-form" id="edit-book-form" data-book-id="">
-          <div class="book-form-fields">
-            <input
-              class="field-model"
-              type="text"
-              name="isbn"
-              placeholder="ISBN"
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="title"
-              placeholder="Title"
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="subtitle"
-              placeholder="Subtitle"
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="author"
-              placeholder="Author"
-            />
-            <input
-              class="field-model"
-              type="number"
-              name="page_count"
-              placeholder="Pages"
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="language"
-              placeholder="Language"
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="publisher"
-              placeholder="Publisher"
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="published_at"
-              placeholder="Published Date"
-            />
-            <input
-              class="field-model"
-              type="number"
-              name="total_copies"
-              placeholder="Total Copies"
-            />
-            <input
-              class="field-model"
-              type="text"
-              name="description"
-              placeholder="Description"
-            />
-          </div>
-
-          <!-- img -->
-          <label class="file-upload">
-            <input
-              class="form-img-file"
-              id="edit-form-img-file"
-              type="file"
-              name="book_img"
-              accept="image/*"
-              required
-              hidden
-            />
-            <span class="file-btn">Upload cover</span>
-            <span class="file-name" id="edit-book-file-name"
-              >No file selected</span
-            >
-          </label>
-
-          <!-- submit -->
-          <div class="model-buttons">
-            <button class="btn-model" type="button" id="close-edit-model">
-              Cancel
-            </button>
-            <button class="btn-model" type="submit">Update Book</button>
-          </div>
-        </form>
-      </div>
-    </div>
+    {% include "partials/_navbar.html" %}
 
     <!-- main content -->
     <main class="manage-page">
       <div id="toast" class="toast"></div>
-      <!-- manage books section -->
-      <section class="manage-books-card card-md">
+      <section class="manage-section card-md">
         <!-- header -->
         <header class="table-header">
           <div class="header-title">
+            <!-- title -->
             <h4 class="table-title">Books</h4>
-            <input
-              type="text"
-              class="field-search-table"
-              id="search-books-table"
-              placeholder="search for book, author"
-              name="search"
-            />
+
+            <!-- search bar -->
+            <div class="search-books table">
+              <span class="search-icon">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+
+              <input
+                id="search-field"
+                class="search-input"
+                type="input"
+                placeholder="Search for a book..."
+              />
+
+              <button
+                id="clear-search"
+                class="clear-search-btn hidden"
+                type="button"
+                aria-label="Clear search"
+              >
+                <i class="fas fa-times-circle fa-lg"></i>
+              </button>
+            </div>
           </div>
-          <!-- header actions -->
+
+          <!-- actions -->
           <div class="header-actions">
-            <button type="button" id="open-add-model" class="btn btn-outline">
-              Add book
+            <button
+              type="button"
+              class="btn btn-outline"
+              data-open-modal="#add-book"
+            >
+              Add Book
             </button>
           </div>
         </header>
 
         <!-- table -->
-        <table class="manage-books-table">
+        <table class="manage-books-table books">
+          <colgroup>
+            <col style="width: 5%" />
+            <col style="width: 40%" />
+            <col style="width: 40%" />
+            <col style="width: 5%" />
+            <col style="width: 10%" />
+          </colgroup>
           <thead>
             <tr>
               <th>ID</th>
               <th>Title</th>
               <th>Author</th>
               <th>Copies</th>
-              <th>Action</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="manage-books-data"></tbody>
@@ -387,6 +87,230 @@
       </section>
     </main>
 
+    <!-- add book model -->
+    <div id="add-book" class="model hidden" data-modal>
+      <div class="model-content manage-books">
+        <!-- close form -->
+        <img
+          src="{{url_for('static', filename='assets/icons/close.png')}}"
+          class="close-form-btn"
+          data-close-modal
+        />
+        <!-- form -->
+        <form data-form-type="add-book">
+          <!-- title -->
+          <div class="form-row">
+            <h1>Add Book</h1>
+          </div>
+
+          <span class="card-divider"></span>
+
+          <!-- inputs -->
+          <div class="inputs form-row">
+            <div class="book-form-fields">
+              <input
+                class="field-model"
+                type="text"
+                name="isbn"
+                placeholder="ISBN"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="title"
+                placeholder="Title"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="subtitle"
+                placeholder="Subtitle"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="author"
+                placeholder="Author"
+              />
+              <input
+                class="field-model"
+                type="number"
+                name="page_count"
+                placeholder="Pages"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="language"
+                placeholder="Language"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="publisher"
+                placeholder="Publisher"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="published_at"
+                placeholder="Published Date"
+              />
+              <input
+                class="field-model"
+                type="number"
+                name="total_copies"
+                placeholder="Total Copies"
+              />
+              <textarea name="description" class="field-model"> </textarea>
+            </div>
+
+            <!-- img -->
+            <label class="file-upload">
+              <input
+                class="form-img-file"
+                id="add-form-img-file"
+                type="file"
+                name="book_img"
+                accept="image/*"
+                hidden
+              />
+              <span class="file-btn">Upload cover</span>
+              <span class="file-name" id="add-book-file-name"
+                >No file selected</span
+              >
+            </label>
+          </div>
+
+          <span class="card-divider"></span>
+
+          <!-- submit -->
+          <div class="form-row">
+            <button class="btn btn-primary btn-model" type="submit">
+              Confirm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- edit book model -->
+    <div id="edit-book" class="model hidden" data-modal>
+      <div class="model-content">
+        <!-- close form -->
+        <img
+          src="{{url_for('static', filename='assets/icons/close.png')}}"
+          class="close-form-btn"
+          data-close-modal
+        />
+        <!-- form -->
+        <form data-form-type="edit-book" data-book-id="">
+          <!-- title -->
+          <div class="form-row">
+            <h1>Edit Book</h1>
+          </div>
+
+          <span class="card-divider"></span>
+
+          <!-- inputs -->
+          <div class="inputs form-row">
+            <div class="book-form-fields">
+              <input
+                class="field-model"
+                type="text"
+                name="isbn"
+                placeholder="ISBN"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="title"
+                placeholder="Title"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="subtitle"
+                placeholder="Subtitle"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="author"
+                placeholder="Author"
+              />
+              <input
+                class="field-model"
+                type="number"
+                name="page_count"
+                placeholder="Pages"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="language"
+                placeholder="Language"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="publisher"
+                placeholder="Publisher"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="published_at"
+                placeholder="Published Date"
+              />
+              <input
+                class="field-model"
+                type="number"
+                name="total_copies"
+                placeholder="Total Copies"
+              />
+              <input
+                class="field-model"
+                type="text"
+                name="description"
+                placeholder="Description"
+              />
+            </div>
+
+            <!-- img -->
+            <label class="file-upload">
+              <input
+                class="form-img-file"
+                id="edit-form-img-file"
+                type="file"
+                name="book_img"
+                accept="image/*"
+                hidden
+              />
+              <span class="file-btn">Upload cover</span>
+              <span class="file-name" id="edit-book-file-name"
+                >No file selected</span
+              >
+            </label>
+          </div>
+
+          <span class="card-divider"></span>
+
+          <!-- submit -->
+          <div class="form-row">
+            <button class="btn-model btn btn-primary" type="submit">
+              Confirm
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- script -->
+    <script
+      src="https://kit.fontawesome.com/0fa7007e9e.js"
+      crossorigin="anonymous"
+    ></script>
     <script
       type="module"
       src="{{ url_for('static', filename='js/app.js') }}"

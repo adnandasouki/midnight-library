@@ -20,13 +20,9 @@ class BookService:
         if page_count is None or page_count <= 0:
             raise ValueError("Page count must be greater than 0")
         
-        # if not (1500 <= published_at <= 2025):
-        #     raise ValueError("Invalid published year")
-        
         if total_copies is not None and total_copies <= 0:
             raise ValueError("Invalid copies count")
         
-    # Business logic for creating a new book
     def create_book(
         self,
         isbn: str,
@@ -73,21 +69,25 @@ class BookService:
         )
         return book
     
-    # get all books with optional pagination
-    def get_all_books(self, page=None, per_page=10, q=None):
+    def get_all_books(self, page, per_page, q):
         if page is not None and page < 1:
             raise ValueError("Invalid page count")
 
-        return self.repo.all(page=page, per_page=per_page, q=q)
+        return self.repo.all(
+            page=page,
+            per_page=per_page,
+            q=q
+        )
     
-    # get by id
+    def get_all_for_admin(self, q=None):
+        return self.repo._base_query(q)
+    
     def get_by_id(self, id):
         book = self.repo.by_id(id)
         if not book:
             raise ValueError("Book not found")
         return book
     
-    # get by title
     def get_by_title(self, title: str):
         title = title.lower().strip()
         book = self.repo.by_title(title)
@@ -95,7 +95,6 @@ class BookService:
             raise ValueError("Book not found")
         return book
     
-    # get by isbn
     def get_by_isbn(self, isbn):
         book = self.repo.by_isbn(isbn)
         if not book:

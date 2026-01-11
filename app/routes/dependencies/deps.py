@@ -1,9 +1,10 @@
-from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from flask import jsonify, request, current_app, g
 from functools import wraps
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 import jwt
 
 from ...extentions import db
+
 from app.repositories.borrowings_repository import BorrowingsRepository
 from app.repositories.activities_repository import ActivitiesRepository
 from app.repositories.favorites_repository import FavoritesRepository
@@ -14,7 +15,6 @@ from app.services.activity_service import ActivityService
 from app.services.favorite_service import FavoriteService
 from app.services.book_service import BookService
 from app.services.user_service import UserService
-
 
 def book_service(db):
     repo = BooksRepository(db)

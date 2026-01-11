@@ -1,0 +1,99 @@
+/* ========================
+   BROWSE BOOKS BAR
+======================== */
+
+/* wrapper */
+
+.search-books {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  max-width: 800px;
+  width: 100%;
+  padding: 0 14px;
+
+  background-color: white;
+  border: 2px solid var(--color-midnight-accent);
+  border-radius: 999px;
+
+  transition: box-shadow 0.15s ease;
+}
+
+.search-books:focus-within {
+  box-shadow: 0 0 0 2px var(--color-midnight-accent);
+}
+
+.search-icon {
+  color: var(--color-midnight-accent);
+  opacity: 0.8;
+}
+
+/* input */
+
+.search-input {
+  flex: 1;
+  height: 52px;
+  outline: none;
+
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-midnight-primary);
+}
+
+.search-input::placeholder {
+  font-weight: 100;
+  font-size: 1rem;
+}
+
+.clear-search-btn {
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: var(--gray-400);
+  font-size: 1rem;
+
+  transition: color 0.15s ease;
+}
+
+.clear-search-btn:hover {
+  color: rgb(246, 66, 66);
+}
+
+/* ========================
+   SEARCH TABLE BAR
+======================== */
+
+.search-books.table {
+  height: 30px;
+  width: 350px;
+
+  border: 1px solid #c0bebe;
+  border-radius: 999px;
+}
+
+.search-books.table .search-input {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.search-input::placeholder {
+  font-weight: 100;
+  font-size: 0.8rem;
+}
+
+.search-books.table:focus-within {
+  box-shadow: 0 0 0 1px var(--color-midnight-accent);
+}
+
+.search-books.table .search-icon {
+  color: #cac9c9;
+
+  transition: color 0.15s ease;
+}
+
+.search-books.table:focus-within .search-icon {
+  color: var(--color-midnight-accent);
+}

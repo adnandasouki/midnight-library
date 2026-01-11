@@ -1,15 +1,14 @@
-from .dependencies.deps import user_service, token_required, optional_auth, db, activity_service
 from flask import Blueprint, current_app, redirect, session, request, jsonify, g
-from datetime import datetime, timezone, timedelta
 import jwt
-
+from datetime import datetime, timezone, timedelta
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 
+from .dependencies.deps import user_service, token_required, optional_auth, db, activity_service
+
 auth_routes = Blueprint("auth_routes", __name__)
 
-# Sign up
 @auth_routes.route("/signup", methods=["POST"])
 def signup():
     try:
@@ -70,7 +69,7 @@ def signup():
         return response, 201
     
     except ValueError as e:
-        return jsonify({"type": "error", "error": str(e)}), 400
+        return jsonify({"type": "error", "msg": str(e)}), 400
     
     except Exception:
         import traceback
@@ -81,7 +80,6 @@ def signup():
             "error": "Internal server error"
         }), 500
 
-# Sign in
 @auth_routes.route("/signin", methods=["POST"])
 def signin():
     try:
@@ -243,7 +241,6 @@ def google_signin_callback():
         traceback.print_exc()
         return redirect("http://127.0.0.1:5000/signup?error=google_auth_failed")
 
-# Sign out
 @auth_routes.route("/signout", methods=["POST"])
 def signout():
     response = jsonify({"msg": "Signed out"})
@@ -259,6 +256,7 @@ def me():
         "user": request.user,
     })
 
+# returns whether the user is authenticated or not
 @auth_routes.route("/state")
 @optional_auth
 def get_auth_state():
