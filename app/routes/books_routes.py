@@ -173,7 +173,7 @@ def update_book(id):
 
         book_img = request.files.get("book_img")
 
-        IMAGES_FOLDER = os.path.join("app/static/assets/images")
+        IMAGES_FOLDER = os.path.join("app/static/assets/books")
         
         img_name = secure_filename(book_img.filename)
         book_img.save(os.path.join(IMAGES_FOLDER, img_name))

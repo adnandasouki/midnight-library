@@ -297,7 +297,8 @@ export const ManageBooksController = {
     utils.UI.showToast(data.msg, data.type);
 
     if (response.status === 201) {
-      this.init();
+      const refreshed = await services.BookService.loadForAdmin();
+      views.ManageBooksView.render(refreshed);
     }
   },
 
@@ -321,8 +322,8 @@ export const ManageBooksController = {
     utils.UI.showToast(data.msg, data.type);
 
     if (response.status === 200) {
-      await BookService.loadAll();
-      views.ManageBooksView.renderBooksTable(this.visibleBooks);
+      const refreshed = await services.BookService.loadForAdmin();
+      views.ManageBooksView.render(refreshed);
     }
   },
 };
@@ -397,10 +398,9 @@ export const ManageUsersController = {
     utils.UI.showToast(data.msg, data.type);
 
     if (response.status === 201) {
-      await services.UserService.loadAll();
-      views.ManageUsersView.renderUsersTable(this.visibleUsers);
-      views.ManageUsersView.closeAddModel();
-      views.ManageUsersView.resetAddBookForm();
+      views.ManageUsersView.closeVisibleModal();
+      const refreshed = await services.UserService.loadAll();
+      views.ManageUsersView.renderUsersTable(refreshed);
     }
   },
 

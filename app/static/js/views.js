@@ -1064,11 +1064,9 @@ export const ManageBooksView = {
   },
 
   bindEvents(onSearch, onDeleteBookClicked, onAddBookSubmit, onEditBookSubmit) {
-    // Search
     this.searchField.addEventListener("input", (e) => {
       onSearch(e.target.value);
 
-      // if empty hide clear
       if (e.target.value === "") {
         this.clearSearch.classList.add("hidden");
       } else {
@@ -1076,13 +1074,11 @@ export const ManageBooksView = {
       }
     });
 
-    // clear search
     this.clearSearch.addEventListener("click", () => {
       this.searchField.value = "";
       this.clearSearch.classList.add("hidden");
     });
 
-    // Delete book
     this.container.addEventListener("click", async (e) => {
       const btn = e.target.closest(".delete-book-btn");
       if (!btn) return;
@@ -1096,6 +1092,10 @@ export const ManageBooksView = {
 
     document.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-open-modal]");
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0028886 (fix(manage-books): correct form submission and delete logic)
       if (!btn) return;
 
       const modal = document.querySelector(btn.dataset.openModal);
@@ -1116,12 +1116,7 @@ export const ManageBooksView = {
 
       const modal = document.querySelector("[data-modal]:not(.hidden)");
 
-      if (e.target === closeBtn) {
-        this.resetForm();
-        modal.classList.add("hidden");
-      }
-
-      if (e.target === modal) {
+      if (closeBtn || e.target === modal) {
         this.resetForm();
         modal.classList.add("hidden");
       }
@@ -1155,13 +1150,11 @@ export const ManageBooksView = {
       this.closeModal();
     });
 
-    // upload img for add book form
     this.addFormImgFile.addEventListener("change", () => {
       this.addBookFileName.textContent =
         this.addFormImgFile.files[0]?.name || "No file selected";
     });
 
-    // upload img for edit book form
     this.editFormImgFile.addEventListener("change", () => {
       this.editBookFileName.textContent =
         this.editFormImgFile.files[0]?.name || "No file selected";
@@ -1169,12 +1162,10 @@ export const ManageBooksView = {
   },
 
   initEditBookForm(book) {
-    // // select the edit user form
     const form = document.querySelector('[data-form-type="edit-book"]');
 
     form.dataset.bookId = book.id;
 
-    // fill the fields with the precreated data
     form.isbn.value = book.isbn ?? "";
     form.title.value = book.title ?? "";
     form.author.value = book.author ?? "";
@@ -1195,7 +1186,6 @@ export const ManageBooksView = {
     document.querySelector("[data-modal]:not(.hidden)").classList.add("hidden");
   },
 
-  // Render manage books table
   renderBooksTable(books) {
     const tbody = this.container;
     const table = document.querySelector(".books");
@@ -1292,11 +1282,9 @@ export const ManageUsersView = {
     onAddUserSubmit,
     onDeleteUserClicked
   ) {
-    // Search
     this.searchField.addEventListener("input", (e) => {
       onSearch(e.target.value);
 
-      // if empty hide clear
       if (e.target.value === "") {
         this.clearSearch.classList.add("hidden");
       } else {
@@ -1304,7 +1292,6 @@ export const ManageUsersView = {
       }
     });
 
-    // clear search
     this.clearSearch.addEventListener("click", () => {
       this.searchField.value = "";
       this.clearSearch.classList.add("hidden");
@@ -1330,23 +1317,20 @@ export const ManageUsersView = {
       modal.classList.remove("hidden");
     });
 
-    // close with btn
+    // close with btn or when clicking outside
     document.addEventListener("click", (e) => {
       const modal = e.target.closest("[data-modal]:not(.hidden)");
       const closeBtn = e.target.closest("[data-close-modal]");
 
-      this.resetForm();
+      if (!modal) return;
 
-      if (closeBtn) {
+      if (closeBtn || e.target === modal) {
         modal.classList.add("hidden");
-      }
-
-      if (e.target === modal) {
-        modal.classList.add("hidden");
+        this.resetForm();
       }
     });
 
-    // close with esc btn or when clicking outside
+    // close with esc btn
     document.addEventListener("keydown", (e) => {
       if (!e.key === "Escape") return;
 
@@ -1366,7 +1350,6 @@ export const ManageUsersView = {
       const form = e.target.closest("[data-form-type]");
 
       if (!form || !modal) return;
-
       e.preventDefault();
 
       const type = form.dataset.formType;
