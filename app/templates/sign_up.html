@@ -16,108 +16,121 @@
     />
   </head>
   <body>
+    <nav class="navbar">
+      <div class="navbar-wrapper">
+        <div class="leading">
+          <a href="/" class="navbar-brand">
+            <img
+              src="{{ url_for('static', filename='assets/logos/brand.png') }}"
+              alt="brand"
+            />
+            <span>Midnight Library</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
     <!-- main content -->
     <main class="auth-page">
-      <section class="auth-card card-md">
-        <!-- form -->
-        <form id="signup-form" class="auth-form">
-          <!-- header -->
-          <header class="auth-header">
-            <!-- brand -->
-            <a href="/">
-              <div class="form-brand">
-                <img
-                  src="{{ url_for('static', filename='assets/logos/brand.png') }}"
-                  alt="brand"
-                />
-                <span>Library System</span>
+      <section class="auth-card card-md signup">
+        <!-- content -->
+        <div class="auth-card-content">
+          <h2 class="auth-card-title">Create a new account</h2>
+
+          <!-- form -->
+          <form id="signup-form" class="auth-form">
+            <div class="error hidden"></div>
+
+            <div class="auth-fields">
+              <!-- username -->
+              <div class="auth-card-field">
+                <label>Username</label>
+                <div class="field-wrapper">
+                  <i class="fa-solid fa-user icon"></i>
+
+                  <input type="text" class="field" name="username" required />
+                </div>
               </div>
-            </a>
-            <!-- texts -->
 
-            <div class="form-header-texts">
-              <h3>Sign Up</h3>
-              <p>Create a new account</p>
+              <div class="auth-card-field">
+                <label>Email</label>
+                <div class="field-wrapper">
+                  <i class="fa-solid fa-envelope icon"></i>
+                  <input type="email" class="field" name="email" required />
+                </div>
+              </div>
+
+              <div class="auth-card-field">
+                <label>Password</label>
+                <div class="field-wrapper">
+                  <i class="fa-solid fa-lock icon"></i>
+
+                  <input
+                    type="password"
+                    class="field"
+                    name="password"
+                    required
+                  />
+
+                  <!-- show/hide -->
+                  <div class="pass-visibility hidden">
+                    <button type="button" class="password hide hidden">
+                      <i class="fa-solid fa-eye-slash"></i>
+                    </button>
+
+                    <button type="button" class="password show">
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </header>
 
-          <div class="error hidden"></div>
+            <!-- submit -->
+            <button type="submit" class="btn btn-primary btn-full">
+              <span class="submit-text">Create Account</span>
+              <span class="spinner hidden"></span>
+            </button>
+          </form>
 
-          <div class="auth-fields">
-            <input
-              type="text"
-              class="field"
-              placeholder="Username"
-              name="username"
-              required
-            />
-
-            <input
-              type="email"
-              class="field"
-              placeholder="Email"
-              name="email"
-              required
-            />
-
-            <input
-              type="password"
-              class="field"
-              placeholder="Password"
-              name="password"
-              required
-            />
+          <!-- DIVIDER -->
+          <div class="auth-divider">
+            <span>or</span>
           </div>
 
-          <!-- submit -->
-          <button type="submit" class="btn btn-primary btn-full">
-            <span class="submit-text">Create Account</span>
-            <span class="spinner hidden"></span>
-          </button>
-        </form>
-
-        <!-- DIVIDER -->
-        <div class="auth-divider">
-          <span>or</span>
-        </div>
-
-        <!-- SIGN IN LINK -->
-        <div class="has-account">
-          <p>Have an account? <a href="/signin">Sign in</a></p>
-        </div>
-
-        <!-- DIVIDER -->
-        <div class="auth-divider">
-          <span>or</span>
-        </div>
-
-        <!-- GOOGLE AUTH -->
-        <div class="oauth-section">
-          <button id="oauth-google" class="btn btn-outline" type="button">
-            <span class="spinner google hidden"></span>
-            <div class="oauth-btn-content">
-              <img
-                src="/static/assets/logos/google.svg"
-                class="btn-icon"
-                alt="Google"
-              />
-              <span>Sign in with Google</span>
-            </div>
-          </button>
-        </div>
-
-        <!-- GUEST ACCESS -->
-        <div class="continue-as-guest">
-          <a href="/">
-            <button type="button" class="btn btn-guest">
-              <p>Continue as Guest</p>
+          <!-- GOOGLE AUTH -->
+          <div class="oauth-section">
+            <button id="oauth-google" class="btn btn-outline" type="button">
+              <span class="spinner google hidden"></span>
+              <div class="oauth-btn-content">
+                <img
+                  src="/static/assets/logos/google.svg"
+                  class="btn-icon"
+                  alt="Google"
+                />
+                <span>Sign in with Google</span>
+              </div>
             </button>
-          </a>
+          </div>
+        </div>
+
+        <!-- footer -->
+        <div class="auth-card-footer">
+          <!-- SIGN IN LINK -->
+          <div class="has-account">
+            <p>Already have an account? <a href="/signin">Sign in</a></p>
+          </div>
         </div>
       </section>
     </main>
 
+    <footer class="footer">© 2026 Midnight Library</footer>
+
     <!-- script -->
+    <script
+      src="https://kit.fontawesome.com/0fa7007e9e.js"
+      crossorigin="anonymous"
+    ></script>
     <script
       type="module"
       src="{{ url_for('static', filename='js/app.js') }}"

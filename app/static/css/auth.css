@@ -3,81 +3,101 @@
 ======================== */
 
 .auth-page {
-  background-color: var(--color-midnight-primary);
+  background-color: var(--color-midnight-primary-soft);
   padding: 1rem;
   min-height: 100vh;
+
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* card */
+
 .auth-card {
-  width: 100%;
-  max-width: 450px;
-  min-height: 500px;
-  padding: 1.3rem 3.5rem;
+  position: relative;
+  width: 500px;
+  min-height: 545px;
+  padding: 3rem;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.auth-card.signup {
+  min-height: 625px;
+}
+
+/* card content */
+
+.auth-card-content {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.auth-card-title {
+  width: 100%;
+  display: block;
+  text-align: left;
+
+  color: var(--color-midnight-primary);
+}
+
+/* card footer */
+
+.auth-card-footer {
+  background-color: #f6f9fc;
+  width: 490px;
+  padding: 1.5rem;
+
+  display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+
+  position: absolute;
+  bottom: 5px;
+
+  border-radius: 10px;
 }
+
+/* form */
 
 .auth-form {
   width: 100%;
+
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-  text-align: center;
-}
-
-.auth-header {
-  padding-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.auth-header .navbar-brand {
-  padding-bottom: 0.5rem;
-}
-
-.form-brand {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
-.form-brand img {
-  width: 35px;
-  height: 35px;
-}
-
-.form-brand span {
-  font-size: 1.7rem;
-  font-weight: 700;
-
-  color: var(--color-midnight-primary);
-}
-
-.form-header-texts h3 {
-  font-size: 1.5rem;
-
-  color: var(--color-midnight-primary);
-}
-
-.form-header-texts p {
-  color: var(--color-midnight-primary-soft);
+  gap: 2rem;
 }
 
 .auth-fields {
+  width: 100%;
+
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 100%;
+}
+
+.auth-card-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.auth-card-field label {
+  color: var(--color-midnight-primary-soft);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.auth-card-field a {
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .has-account {
@@ -150,6 +170,74 @@
   text-decoration: underline;
 }
 
+/* fields */
+
+.field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.field-wrapper .icon {
+  position: absolute;
+  left: 0.5rem;
+  opacity: 0.5;
+  pointer-events: none;
+
+  transition: color 0.15s ease;
+}
+
+.field-wrapper input {
+  width: 100%;
+
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+}
+
+.field-wrapper:focus-within i {
+  color: var(--color-midnight-accent-strong);
+}
+
+.password-label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.password-label a {
+  color: var(--color-midnight-accent);
+}
+
+.password-label a:hover {
+  color: var(--color-midnight-accent-strong);
+}
+
+.field-wrapper:focus-within .pass-visibility {
+  display: block;
+}
+
+.pass-visibility {
+  position: absolute;
+  right: 0.5rem;
+}
+
+.field-wrapper .password {
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0.4rem;
+
+  transition: background-color 0.15s ease;
+}
+
+.field-wrapper .password:hover {
+  background-color: #eeeeee5e;
+}
+
+.field-wrapper .password:active {
+  background-color: #c5c5c55e;
+}
+
 /* divider */
 
 .auth-divider {
@@ -157,7 +245,7 @@
   align-items: center;
   text-align: center;
   width: 100%;
-  margin: 0.8rem 0;
+  /* margin: 0.8rem 0; */
   color: #878787;
   font-size: 0.7rem;
 }

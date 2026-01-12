@@ -16,98 +16,112 @@
     />
   </head>
   <body>
+    <nav class="navbar">
+      <div class="navbar-wrapper">
+        <div class="leading">
+          <a href="/" class="navbar-brand">
+            <img
+              src="{{ url_for('static', filename='assets/logos/brand.png') }}"
+              alt="brand"
+            />
+            <span>Midnight Library</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
     <main class="auth-page">
       <!-- card -->
       <section class="auth-card card-md">
-        <!-- form -->
-        <form id="signin-form" class="auth-form">
-          <!-- header -->
-          <header class="auth-header">
-            <!-- brand -->
-            <a href="/">
-              <div class="form-brand">
-                <img
-                  src="{{ url_for('static', filename='assets/logos/brand.png') }}"
-                  alt="brand"
-                />
-                <span>Midnight Library</span>
+        <!-- content -->
+        <div class="auth-card-content">
+          <h2 class="auth-card-title">Sign in to your account</h2>
+
+          <!-- form -->
+          <form id="signin-form" class="auth-form">
+            <div class="error hidden"></div>
+
+            <!-- inputs -->
+            <div class="auth-fields">
+              <!-- username or email -->
+              <div class="auth-card-field">
+                <label>Username or Email</label>
+                <div class="field-wrapper">
+                  <i class="fa-solid fa-user icon"></i>
+                  <input type="text" class="field" name="username-or-email" />
+                </div>
               </div>
-            </a>
-            <!-- texts -->
-            <div class="form-header-texts">
-              <h3>Sign In</h3>
-              <p>Sign in to your account</p>
+
+              <!-- password -->
+              <div class="auth-card-field">
+                <div class="password-label">
+                  <label>Password</label>
+                  <a href="#">Forgot Password?</a>
+                </div>
+
+                <div class="field-wrapper">
+                  <i class="fa-solid fa-lock icon"></i>
+
+                  <input type="password" class="field" name="password" />
+
+                  <!-- show/hide -->
+                  <div class="pass-visibility hidden">
+                    <button type="button" class="password hide hidden">
+                      <i class="fa-solid fa-eye-slash"></i>
+                    </button>
+
+                    <button type="button" class="password show">
+                      <i class="fa-solid fa-eye"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          </header>
 
-          <div class="error hidden"></div>
+            <!-- submit -->
+            <button type="submit" class="btn btn-primary btn-full">
+              <span class="submit-text">Sign In</span>
+              <span class="spinner hidden"></span>
+            </button>
+          </form>
 
-          <!-- inputs -->
-          <div class="auth-fields">
-            <input
-              type="text"
-              class="field"
-              placeholder="Username or email"
-              name="username-or-email"
-            />
-
-            <input
-              type="password"
-              class="field"
-              placeholder="password"
-              name="password"
-            />
+          <!-- DIVIDER -->
+          <div class="auth-divider">
+            <span>or</span>
           </div>
 
-          <!-- submit -->
-          <button type="submit" class="btn btn-primary btn-full">
-            <span class="submit-text">Sign In</span>
-            <span class="spinner hidden"></span>
-          </button>
-        </form>
-
-        <!-- DIVIDER -->
-        <div class="auth-divider">
-          <span>or</span>
-        </div>
-
-        <!-- LINK TO SIGN UP -->
-        <div class="has-account">
-          <p>Don't have an account? <a href="/signup">Sign up</a></p>
-        </div>
-
-        <!-- DIVIDER -->
-        <div class="auth-divider">
-          <span>or</span>
-        </div>
-
-        <!-- GOOGLE AUTH -->
-        <div class="oauth-section">
-          <button id="oauth-google" class="btn btn-outline" type="button">
-            <span class="spinner google hidden"></span>
-            <div class="oauth-btn-content">
-              <img
-                src="/static/assets/logos/google.svg"
-                class="btn-icon"
-                alt="Google"
-              />
-              <span>Sign in with Google</span>
-            </div>
-          </button>
-        </div>
-
-        <!-- GEUST ACCESS -->
-        <div class="continue-as-guest">
-          <a href="/">
-            <button type="button" class="btn btn-guest">
-              <p>Continue as Guest</p>
+          <!-- GOOGLE AUTH -->
+          <div class="oauth-section">
+            <button id="oauth-google" class="btn btn-outline" type="button">
+              <span class="spinner google hidden"></span>
+              <div class="oauth-btn-content">
+                <img
+                  src="/static/assets/logos/google.svg"
+                  class="btn-icon"
+                  alt="Google"
+                />
+                <span>Sign in with Google</span>
+              </div>
             </button>
-          </a>
+          </div>
+        </div>
+        <!-- footer -->
+        <div class="auth-card-footer">
+          <!-- LINK TO SIGN UP -->
+          <div class="has-account">
+            <p>Don't have an account? <a href="/signup">Sign up</a></p>
+          </div>
         </div>
       </section>
     </main>
 
+    <footer class="footer">© 2026 Midnight Library</footer>
+
     <!-- script -->
+    <script
+      src="https://kit.fontawesome.com/0fa7007e9e.js"
+      crossorigin="anonymous"
+    ></script>
     <script
       type="module"
       src="{{ url_for('static', filename='js/app.js') }}"

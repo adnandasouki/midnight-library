@@ -820,6 +820,11 @@ export const SignInView = {
     // error
     this.error = this.signInForm.querySelector(".error");
 
+    // password
+    this.passInput = document.querySelector('input[type="password"]');
+    this.showPass = document.querySelector(".password.show");
+    this.hidePass = document.querySelector(".password.hide");
+
     if (!this.signInForm || !this.googleAuth) return;
 
     this.bindEvents(onSignInClick, onGoogleAuthClicked);
@@ -835,6 +840,24 @@ export const SignInView = {
     // Continue with Google
     this.googleAuth.addEventListener("click", () => {
       onGoogleAuthClicked();
+    });
+
+    // show password
+    this.showPass.addEventListener("click", () => {
+      this.passInput.type = "text";
+      this.showPass.classList.add("hidden");
+      this.hidePass.classList.remove("hidden");
+
+      this.passInput.focus();
+    });
+
+    // hide password
+    this.hidePass.addEventListener("click", () => {
+      this.passInput.type = "password";
+      this.showPass.classList.remove("hidden");
+      this.hidePass.classList.add("hidden");
+
+      this.passInput.focus();
     });
   },
 
