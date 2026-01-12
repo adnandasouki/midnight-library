@@ -1462,7 +1462,7 @@ export const ManageBorrowingsView = {
     statusFilter: "all",
   },
 
-  init({ applyFilters, onReturnClicked }) {
+  init({ books, applyFilters, onReturnClicked }) {
     this.container = document.getElementById("manage-borrowings-data");
 
     this.searchField = document.getElementById("search-field");
@@ -1472,7 +1472,12 @@ export const ManageBorrowingsView = {
 
     if (!this.container || !this.filters || !this.searchField) return;
 
+    this.render(books);
     this.bindEvents(applyFilters, onReturnClicked);
+  },
+
+  render(books) {
+    this.renderBorrowingsTable(books);
   },
 
   bindEvents(applyFilters, onReturnClicked) {

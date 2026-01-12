@@ -429,11 +429,10 @@ export const ManageBorrowingsController = {
     this.visibleBorrowings = [...this.allBorrowings];
 
     views.ManageBorrowingsView.init({
+      books: this.allBorrowings,
       applyFilters: this.handleFiltering.bind(this),
       onReturnClicked: this.handleForceReturn.bind(this),
     });
-
-    views.ManageBorrowingsView.renderBorrowingsTable(this.visibleBorrowings);
   },
 
   async handleForceReturn(borrowingId) {
@@ -443,9 +442,8 @@ export const ManageBorrowingsController = {
 
     if (response.status === 200) {
       utils.UI.showToast(data.msg, data.type);
-      this.allBorrowings = await BorrowingService.loadAll();
-      this.visibleBorrowings = [...this.allBorrowings];
-      views.ManageBorrowingsView.renderBorrowingsTable(this.visibleBorrowings);
+      const refreshed = await services.BorrowingService.loadAll();
+      views.ManageBorrowingsView.render(refreshed);
     } else {
       utils.UI.showToast(data.msg, data.type);
     }
