@@ -51,3 +51,10 @@ class FavoritesRepository():
             return True
         except:
             return False
+    
+    def delete_by_user(self, user_id):
+        favs = Favorite.query.filter_by(user_id=user_id).all()
+
+        for fav in favs:
+            self.db.session.delete(fav)
+        self.db.session.commit()

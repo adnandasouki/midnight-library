@@ -56,3 +56,11 @@ class ActivitiesRepository:
             return True
         except:
             return False
+        
+    def delete_by_user(self, user_id):
+        acts = Activity.query.filter_by(user_id=user_id).all()
+
+        for act in acts:
+            self.db.session.delete(act)
+
+        self.db.session.commit()

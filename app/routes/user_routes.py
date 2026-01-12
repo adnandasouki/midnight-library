@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request, g
+from traceback import print_exc
 
-from .dependencies.deps import user_service, token_required, borrowing_service, favorite_service, db
+from .dependencies.deps import user_service, token_required, borrowing_service, favorite_service, activity_service, db
 from .dependencies.deps import admin_required, signin_required
 
 user_routes = Blueprint("user_routes", __name__)
@@ -92,6 +93,32 @@ def create_with_admin():
             "type": "error",
             "msg": str(e)
         })
+    
+@user_routes.route("/update-with-admin/<int:id>", methods=["PATCH"])
+def update_with_admin(id):
+    try:
+        service = user_service(db)
+        username = request.form.get("username")
+        email = request.form.get("email")
+
+        service.update_by_id(
+            user_id=id,
+            updates={
+                "username": username,
+                "email": email
+            }
+        )
+
+        return jsonify({
+            "type": "success",
+            "msg": "User updated successfully"
+        }), 200
+    
+    except ValueError as e:
+        return jsonify({"type": "error", "msg": str(e)}), 400
+    except Exception as e:
+        print_exc()
+        return jsonify({"type": "error", "msg": str(e)}), 500
 
 @user_routes.route("/all", methods=["GET"])
 def all_users():
@@ -192,11 +219,18 @@ def update_user_password():
 
 @user_routes.route("/delete/<int:id>", methods=["DELETE"])
 def delete_user(id):
+    users = user_service(db)
+    activities = activity_service(db)
+    borrowings = borrowing_service(db)
+    favorites = favorite_service(db)
+    
     try:
-        service = user_service(db)
-        deleted = service.delete_user_by_id(id)
+        activities.delete_all_by_user(id)
+        borrowings.delete_borrowing_by_user(id)
+        favorites.delete_all_by_user(id)
+        deleted_user = users.delete_user_by_id(id)
 
-        if not deleted:
+        if not deleted_user:
             return jsonify({
                 "type": "error",
                 "msg": "Failed to delete user"
@@ -214,6 +248,7 @@ def delete_user(id):
         }), 400
     
     except Exception as e:
+        print_exc()
         return jsonify({
             "type": "error",
             "msg": str(e)

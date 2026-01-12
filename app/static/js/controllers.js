@@ -375,7 +375,7 @@ export const ManageUsersController = {
 
   async handleEditUser(userId, form) {
     const formData = new FormData(form);
-    const { response, data } = await services.UserService.updateUser(
+    const { response, data } = await services.AdminService.updateWithAdmin(
       userId,
       formData
     );
@@ -409,8 +409,8 @@ export const ManageUsersController = {
 
     if (response.status === 200) {
       utils.UI.showToast(data.msg, data.type);
-      await services.UserService.loadAll();
-      views.ManageUsersView.renderUsersTable(this.visibleUsers);
+      const refreshed = await services.UserService.loadAll();
+      views.ManageUsersView.renderUsersTable(refreshed);
     } else {
       utils.UI.showToast(data.msg, data.type);
     }

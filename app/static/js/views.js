@@ -1138,6 +1138,7 @@ export const ManageBooksView = {
 
     document.addEventListener("submit", (e) => {
       const form = e.target.closest("[data-form-type]");
+
       e.preventDefault();
 
       const type = form.dataset.formType;

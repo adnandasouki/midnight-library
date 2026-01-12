@@ -141,10 +141,12 @@ class BorrowingsRepository:
 
     def delete_by_user_id(self, user_id):
         borrowings = Borrowing.query.filter_by(user_id=user_id).all()
+        
         for b in borrowings:
             self.db.session.delete(b)
         self.db.session.commit()
-        return {"message": f"deleted {len(borrowings)} borrowing records"}
+        
+        return True
 
     def delete_by_book_id(self, book_id):
         borrowings = Borrowing.query.filter_by(book_id=book_id).all()

@@ -41,3 +41,6 @@ class ActivityService:
         self.repo.delete(id=id)        
         return True
             
+    def delete_all_by_user(self, user_id):
+        self.repo.delete_by_user(user_id)
+        return True

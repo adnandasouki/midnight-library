@@ -130,15 +130,6 @@ class BorrowingService:
         return self.borrowing_repo.delete_by_id(id=id)
     
     def delete_borrowing_by_user(self, user_id):
-        user = self.user_repo.by_id(id=user_id)
-        borrowing = self.borrowing_repo.by_user(user_id=user_id)
-
-        if not user:
-            raise ValueError("User not found")
-        
-        if not borrowing:
-            raise ValueError("Borrowing not found")
-        
         return self.borrowing_repo.delete_by_user_id(user_id=user_id)
     
     def delete_borrowing_by_book(self, book_id):

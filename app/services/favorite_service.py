@@ -53,7 +53,9 @@ class FavoriteService:
         
         return self.favorites_repo.delete(fav_id)
     
-    
+    def delete_all_by_user(self, user_id):
+        self.favorites_repo.delete_by_user(user_id)
+        return True
 
 
 

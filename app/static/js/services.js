@@ -292,6 +292,24 @@ export const UserService = {
 };
 
 /* ========================
+   ADMIN
+======================== */
+
+export const AdminService = {
+  async updateWithAdmin(userId, formData) {
+    const { response, data } = await Api.request(
+      `/user/update-with-admin/${userId}`,
+      {
+        method: "PATCH",
+        body: formData,
+      }
+    );
+
+    return { response, data };
+  },
+};
+
+/* ========================
    ACTIVITIES
 ======================== */
 

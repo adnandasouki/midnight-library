@@ -87,7 +87,6 @@ class UserService:
         
         return user
     
-    # update user
     def update_by_id(self, user_id: int, updates: dict):
         user = self.repo.by_id(user_id)
         if not user:

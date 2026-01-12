@@ -61,14 +61,9 @@ class UsersRepository:
     def delete(self, id):
         user = User.query.get(id)
 
-        if not user:
-            raise ValueError("User not found")
-
-        try:
-            self.db.session.delete(user)
-            self.db.session.commit()
-            return True
-        except SQLAlchemyError as e:
-            self.db.session.rollback()
-            raise e
+        print(user)
+        
+        self.db.session.delete(user)
+        self.db.session.commit()
+        return True
 
