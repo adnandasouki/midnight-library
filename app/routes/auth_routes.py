@@ -99,7 +99,7 @@ def signin():
         # TOKEN
         payload = {
             "user_id": user.id,
-            "exp": datetime.now(timezone.utc) + timedelta(hours=2),
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=1),
             "iat": datetime.now(timezone.utc),
             "iss": "lms-api"
         }
@@ -126,7 +126,7 @@ def signin():
             httponly=True,
             secure=False,
             samesite="Lax",
-            max_age=60 * 60 * 2
+            max_age=60
         )
 
         # HTTP RESPONSE + STATUS CODE

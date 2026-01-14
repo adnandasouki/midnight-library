@@ -20,13 +20,19 @@
   transition: box-shadow 0.15s ease;
 }
 
+.search-icon {
+  color: var(--color-midnight-accent);
+  opacity: 0.8;
+
+  transition: color 0.15s ease;
+}
+
 .search-books:focus-within {
   box-shadow: 0 0 0 2px var(--color-midnight-accent);
 }
 
-.search-icon {
+.search-books:focus-within .search-icon {
   color: var(--color-midnight-accent);
-  opacity: 0.8;
 }
 
 /* input */

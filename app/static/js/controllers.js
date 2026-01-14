@@ -1,5 +1,4 @@
 import * as services from "./services.js";
-import { CONFIG } from "./config.js";
 import * as views from "./views.js";
 import * as utils from "./utils.js";
 

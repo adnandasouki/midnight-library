@@ -121,7 +121,6 @@ export const ProfileView = {
     this.avatar = document.getElementById("profile-avatar");
     this.username = document.getElementById("profile-username");
     this.email = document.getElementById("profile-email");
-    // this.joinedDate = document.getElementById("date-joined");
 
     // content
     this.content = document.getElementById("profile-content");
@@ -403,7 +402,6 @@ export const ProfileView = {
     // Identity
     this.username.textContent = profile.username;
     this.email.textContent = profile.email;
-    // this.joinedDate.textContent = UI.toLocaleDateFormatter(profile.joined_date);
   },
 
   // Active borrowings

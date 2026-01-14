@@ -36,10 +36,22 @@
         <!-- subpages -->
         <div class="profile-subpages-wrapper">
           <ul id="profile-subpages" class="profile-subpages">
-            <li id="borrowings-subpage" class="subpage">Borrowings</li>
-            <li id="history-subpage" class="subpage">History</li>
-            <li id="favorites-subpage" class="subpage">Favorites</li>
-            <li id="settings-subpage" class="subpage">Settings</li>
+            <li id="borrowings-subpage" class="subpage">
+              <i class="fa-regular fa-clock"></i>
+              Borrowings
+            </li>
+            <li id="history-subpage" class="subpage">
+              <i class="fa-solid fa-clock-rotate-left fa-sm"></i>
+              History
+            </li>
+            <li id="favorites-subpage" class="subpage">
+              <i class="fa-solid fa-star fa-sm"></i>
+              Favorites
+            </li>
+            <li id="settings-subpage" class="subpage">
+              <i class="fa-solid fa-gear fa-sm"></i>
+              Settings
+            </li>
           </ul>
         </div>
       </section>
@@ -360,6 +372,10 @@
     <footer class="footer">© 2026 Midnight Library</footer>
 
     <!-- script -->
+    <script
+      src="https://kit.fontawesome.com/0fa7007e9e.js"
+      crossorigin="anonymous"
+    ></script>
     <script
       type="module"
       src="{{ url_for('static', filename='js/app.js') }}"

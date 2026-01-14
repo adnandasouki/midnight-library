@@ -19,6 +19,14 @@
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* auth btn */
+
+.prefix-icon {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
 /* edit */
 
 .btn-edit {

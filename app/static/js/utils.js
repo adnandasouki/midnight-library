@@ -1,28 +1,8 @@
 import { CONFIG } from "./config.js";
 
-// Get user role
-export function getRole(user) {
-  if (!user) return "guest";
-  if (user.id_admin) return "admin";
-  return "user";
-}
-
 export const authState = {
   user: null,
   isAuthenticated: false,
-};
-
-export const LMS_Storage = {
-  set(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
-  },
-  get(key) {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
-  },
-  remove(key) {
-    localStorage.removeItem(key);
-  },
 };
 
 export const UI = {

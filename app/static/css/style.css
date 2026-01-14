@@ -452,7 +452,7 @@ a {
 
 .toast {
   position: fixed;
-  top: 20px;
+  bottom: 20px;
   right: 20px;
   padding: 15px 20px;
   background-color: var(--color-success);
@@ -462,7 +462,7 @@ a {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.4s ease;
-  transform: translateY(-20px);
+  transform: translateY(20px);
   z-index: 9999;
 }
 

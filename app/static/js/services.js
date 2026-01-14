@@ -1,4 +1,3 @@
-import { LMS_Storage } from "./utils.js";
 import { CONFIG } from "./config.js";
 
 /* ========================
@@ -7,17 +6,14 @@ import { CONFIG } from "./config.js";
 
 export const Api = {
   async request(endpoint, options = {}) {
-    // Headers
     const headers = {
       ...(options.headers || {}),
     };
 
-    // don't include applicaiton/json if data is formData
     if (!(options.body instanceof FormData)) {
       headers["Content-Type"] = "application/json";
     }
 
-    // Request
     const response = await fetch(`${CONFIG.API_BASE_URL}${endpoint}`, {
       ...options,
       credentials: "include",
@@ -40,14 +36,12 @@ export const Api = {
 ======================== */
 
 export const AuthService = {
-  // Get current user data
   async getCurrentUser() {
     const { response, data } = await Api.request("/auth/me", { method: "GET" });
     if (!response.ok) return null; // guest -> false
     return data.user; // user
   },
 
-  // Get auth state
   async getAuthState() {
     const { response, data } = await Api.request("/auth/state", {
       method: "GET",
@@ -122,7 +116,6 @@ export const BookService = {
     return [];
   },
 
-  // Load book by id
   async loadById(bookId) {
     const { response, data } = await Api.request(`/books/${bookId}`, {
       method: "GET",
@@ -131,7 +124,6 @@ export const BookService = {
     return data;
   },
 
-  // Add book
   async addBook(formData) {
     const { response, data } = await Api.request("/books/create", {
       method: "POST",
@@ -141,7 +133,6 @@ export const BookService = {
     return { response, data };
   },
 
-  // Delete by id
   async deleteBook(bookId) {
     const { response, data } = await Api.request(`/books/${bookId}`, {
       method: "DELETE",
@@ -150,7 +141,6 @@ export const BookService = {
     return { response, data };
   },
 
-  // Update by id
   async updateBook(bookId, formData) {
     const { response, data } = await Api.request(`/books/${bookId}`, {
       method: "PATCH",
@@ -166,7 +156,6 @@ export const BookService = {
 ======================== */
 
 export const BorrowingService = {
-  // Borrow book
   async borrowBook(bookId) {
     const { response, data } = await Api.request("/borrowings/borrow", {
       method: "POST",
@@ -176,7 +165,6 @@ export const BorrowingService = {
     return { response, data };
   },
 
-  // Return borrowed book
   async returnBook(borrowingId) {
     const { response, data } = await Api.request(
       `/borrowings/return/${borrowingId}`,
@@ -191,7 +179,6 @@ export const BorrowingService = {
     return { response, data };
   },
 
-  // Load all borrowings
   async loadAll() {
     const { response, data } = await Api.request("/borrowings/all", {
       method: "GET",
@@ -204,18 +191,11 @@ export const BorrowingService = {
     }
   },
 
-  // Read borrowings by user
-  getByUser() {
-    return LMS_Storage.get(CONFIG.USER_DATA_KEY);
-  },
-
-  // Read all borrowings
   getAll() {
     const user = this.getUserData();
     return user?.all_borrowings || [];
   },
 
-  // Read active borrowings
   getActive() {
     const user = this.getUserData();
     return user?.active_borrowings() || [];
