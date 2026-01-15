@@ -235,7 +235,7 @@
   justify-content: center;
   gap: 0.7rem;
 
-  animation: fadeIn 1s ease forwards;
+  animation: fadeIn 0.75s ease forwards;
 }
 
 .empty-state img {

@@ -18,9 +18,13 @@ A full-stack Library Management System built to manage users, books, and borrowi
 <img src="https://img.shields.io/badge/PYTHON_DOTENV-1.2.1-%233776AB?style=flat&logoSize=auto" />
 </p>
 
+---
+
 ## 📝 Description
 
 Midnight Library is a web-based system designed to manage a library's books, users, and borrowing workflows, with a focus on clean structure, security, and administrative control.
+
+---
 
 ## ⭐ Features
 
@@ -32,6 +36,8 @@ Midnight Library is a web-based system designed to manage a library's books, use
 - 👨🏻‍💼 Admin management of books and users
 - 🟢 Real-time activity log and KPIs
 
+---
+
 ## 🔧 Technical Highlights
 
 - Backend built with Falsk following a modular, layered architecture
@@ -39,11 +45,15 @@ Midnight Library is a web-based system designed to manage a library's books, use
 - Custon authentication implemented using JWTs stored in secure, HTTP-only cookies
 - Clean separation between API endpoints, business logic, and data access layers
 
+---
+
 ## 🛠️ Tech Stack
 
 - Backend: Flask (Python)
 - Frontend: JavaScript, HTML, CSS
 - Database: PostgreSQL
+
+---
 
 ## 🖼️ Visuals
 
@@ -97,30 +107,14 @@ Midnight Library is a web-based system designed to manage a library's books, use
     <img src="docs/screenshots/admin_overview.png" width="800">
 </p>
 
-## 🚧 Project status
-
-- This project is under development and intended for learning and portfolio porpuses.
-- Core functionality is implemented, while some features and refinements are still in progress.
-
 ---
 
 ## 💬 Contact
 
 Suggestions for new features or improvements are welcome and appreciated.
 
-<p align="center">
-    <a href="mailto:mhd.adnan.dasouki@gmail.com">
-    <img src="https://img.shields.io/badge/GMAIL-white?style=for-the-badge&logo=gmail&
-    logoColor=%23EA4335&link=mhd.adnan.dasouki%40gmail.com">
-    </a>
-    <a href="https://www.linkedin.com/in/adnandasouki">
-    <img src="https://img.shields.io/badge/LINKEDIN-%23004788?style=for-the-badge&link=in%2Fadnandasouki">
-    </a>
-    <a href="https://github.com/adnandasouki">
-    <img src="https://img.shields.io/badge/GITHUB-%23181717?style=for-the-badge&logo=github&logoColor=white&link=https%3A%2F%2Fgithub.com%2Fadnandasouki">
-    </a>
-</p>
+<p align="center"><a href="https://github.com/adnandasouki"><img src="https://img.shields.io/badge/GITHUB-%23181717?style=flat-square&logo=github&logoColor=white"></a> <a href="mailto:mhd.adnan.dasouki@gmail.com"><img src="https://img.shields.io/badge/GMAIL-%23EA4335?style=flat-square&logo=gmail&logoColor=white"></a> <a href="https://www.linkedin.com/in/adnandasouki"><img src="https://img.shields.io/badge/LINKEDIN-blue?style=flat-square&logoColor=white"></a></p>
 
 ---
 
-<p align="center"><em> Midnight Library is still under active development </em> </p>
+<p align="center"><em> Built for learning and portfolio purposes </em> </p>
