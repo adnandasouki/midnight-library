@@ -5,6 +5,14 @@ export const authState = {
   isAuthenticated: false,
 };
 
+export function handleSessionExpired() {
+  if (window.location.pathname === "/signin") return;
+
+  alert("Your session has expired. Please sign in again.");
+
+  window.location.href = "/signin";
+}
+
 export const UI = {
   formatDate(dateStr) {
     const dateObj = new Date(dateStr);

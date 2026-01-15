@@ -1,4 +1,5 @@
 import { CONFIG } from "./config.js";
+import { handleSessionExpired } from "./utils.js";
 
 /* ========================
    API
@@ -19,6 +20,12 @@ export const Api = {
       credentials: "include",
       headers,
     });
+
+    if (response.status === 401) {
+      console.log("triggered");
+      handleSessionExpired();
+      throw new Error("Session expired");
+    }
 
     let data = null;
     const contentType = response.headers.get("Content-Type");
