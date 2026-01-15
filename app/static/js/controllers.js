@@ -223,7 +223,7 @@ export const AdminController = {
     this.borrowings = await services.BorrowingService.loadAll();
     this.users = await services.UserService.loadAll();
     this.books = await services.BookService.loadForAdmin();
-    this.activities = await services.ActivityService.loadRecent();
+    this.activity = await services.ActivityService.loadRecent();
 
     views.AdminView.init();
 
@@ -231,7 +231,7 @@ export const AdminController = {
       users: this.users,
       books: this.books,
       borrowings: this.borrowings,
-      activities: this.activities,
+      activity: this.activity,
     });
   },
 };
@@ -242,10 +242,10 @@ export const AdminController = {
 
 export const AllActivityController = {
   async init() {
-    this.activities = await services.ActivityService.loadAll();
+    this.activity = await services.ActivityService.loadAll();
 
     views.AllActivityView.init();
-    views.AllActivityView.render(this.activities);
+    views.AllActivityView.render(this.activity);
   },
 };
 

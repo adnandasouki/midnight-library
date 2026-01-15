@@ -574,6 +574,8 @@ export const AdminView = {
     this.usersCount = document.getElementById("users-count");
     this.booksCount = document.getElementById("books-count");
     this.recentActivityContainer = document.getElementById("recent-activity");
+    this.recentActivityEmpty = document.querySelector(".recent-activity-empty");
+    this.recentActivity = document.querySelector(".recent-activity");
 
     // attention required items
     this.overdueAttentionCount = document.getElementById(
@@ -593,7 +595,7 @@ export const AdminView = {
   },
 
   // render admin overview page
-  render({ users, books, borrowings, activities }) {
+  render({ users, books, borrowings, activity }) {
     // attention required
     const overdues = borrowings.filter((b) => b.status === "overdue");
     if (overdues.length > 0) {
@@ -613,7 +615,7 @@ export const AdminView = {
     this.booksCount.textContent = `${books.length}`;
 
     // recent activity
-    this.renderRecentActivity(activities);
+    this.renderRecentActivity(activity);
   },
 
   showAttention(attention) {
@@ -624,18 +626,18 @@ export const AdminView = {
     attention.classList.add("hidden");
   },
 
-  // render recent activity list
-  renderRecentActivity(activities) {
-    // if there's no recent activitie
-    if (!activities) {
-      this.recentActivityContainer.innerHTML =
-        "No recent activities found 👀..";
-      return;
+  renderRecentActivity(activity) {
+    this.recentActivityContainer.innerHTML = "";
+
+    this.recentActivityEmpty.classList.add("hidden");
+    this.recentActivity.classList.remove("empty");
+
+    if (activity.length === 0) {
+      this.recentActivity.classList.add("empty");
+      this.recentActivityEmpty.classList.remove("hidden");
     }
 
-    // if there's recent activities
-    this.recentActivityContainer.innerHTML = "";
-    activities.forEach((act) => {
+    activity.forEach((act) => {
       const activity = `
         <li class="recent-activity-list-item">
             ${this.renderActivityMessage({
@@ -1090,12 +1092,7 @@ export const ManageBooksView = {
 
     document.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-open-modal]");
-<<<<<<< HEAD
-=======
-
->>>>>>> 0028886 (fix(manage-books): correct form submission and delete logic)
       if (!btn) return;
-
       const modal = document.querySelector(btn.dataset.openModal);
 
       if (modal.id === "edit-book") {
