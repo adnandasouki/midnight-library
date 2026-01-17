@@ -88,7 +88,7 @@
       </section>
     </main>
 
-    <!-- add book model -->
+    <!-- add book modal -->
     <div id="add-book" class="model hidden" data-modal>
       <div class="model-content manage-books">
         <!-- close form -->
@@ -98,7 +98,7 @@
           data-close-modal
         />
         <!-- form -->
-        <form data-form-type="add-book">
+        <form data-form-type="add-book" class="manage-books-form">
           <!-- title -->
           <div class="form-row">
             <h1>Add Book</h1>
@@ -107,80 +107,106 @@
           <span class="card-divider"></span>
 
           <!-- inputs -->
-          <div class="inputs form-row">
+          <div class="inputs form-row book-inputs">
             <div class="book-form-fields">
-              <input
-                class="field-model"
-                type="text"
-                name="isbn"
-                placeholder="ISBN"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="title"
-                placeholder="Title"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="subtitle"
-                placeholder="Subtitle"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="author"
-                placeholder="Author"
-              />
-              <input
-                class="field-model"
-                type="number"
-                name="page_count"
-                placeholder="Pages"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="language"
-                placeholder="Language"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="publisher"
-                placeholder="Publisher"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="published_at"
-                placeholder="Published Date"
-              />
-              <input
-                class="field-model"
-                type="number"
-                name="total_copies"
-                placeholder="Total Copies"
-              />
-              <textarea name="description" class="field-model"> </textarea>
-            </div>
+              <!-- book info -->
+              <div class="fields-group">
+                <p>Book Info</p>
+                <div class="fields">
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="isbn"
+                    placeholder="ISBN"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="title"
+                    placeholder="Title"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="subtitle"
+                    placeholder="Subtitle"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="author"
+                    placeholder="Author"
+                  />
+                </div>
+              </div>
 
-            <!-- img -->
-            <label class="file-upload">
-              <input
-                class="form-img-file"
-                id="add-form-img-file"
-                type="file"
-                name="book_img"
-                accept="image/*"
-                hidden
-              />
-              <span class="file-btn">Upload cover</span>
-              <span class="file-name" id="add-book-file-name"
-                >No file selected</span
-              >
-            </label>
+              <!-- publishing -->
+              <div class="fields-group">
+                <p>Publishing</p>
+                <div class="fields">
+                  <input
+                    class="field-model"
+                    type="number"
+                    name="page_count"
+                    placeholder="Pages"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="language"
+                    placeholder="Language"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="publisher"
+                    placeholder="Publisher"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="published_at"
+                    placeholder="Published Date"
+                  />
+                </div>
+              </div>
+
+              <!-- inventory -->
+              <div class="fields-group">
+                <p>Inventory</p>
+                <div class="fields">
+                  <input
+                    class="field-model"
+                    type="number"
+                    name="total_copies"
+                    placeholder="Total Copies"
+                  />
+                </div>
+              </div>
+
+              <!-- additional -->
+              <div class="fields-group">
+                <p>Additional</p>
+                <div class="fields additional">
+                  <textarea name="description" class="field-model"> </textarea>
+                  <!-- img -->
+                  <label class="file-upload">
+                    <input
+                      class="form-img-file"
+                      id="add-form-img-file"
+                      type="file"
+                      name="book_img"
+                      accept="image/*"
+                      hidden
+                    />
+                    <span class="file-btn">Upload cover</span>
+                    <span class="file-name" id="add-book-file-name"
+                      >No file selected</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
 
           <span class="card-divider"></span>
@@ -197,7 +223,7 @@
 
     <!-- edit book model -->
     <div id="edit-book" class="model hidden" data-modal>
-      <div class="model-content">
+      <div class="model-content manage-books">
         <!-- close form -->
         <img
           src="{{url_for('static', filename='assets/icons/close.png')}}"
@@ -205,7 +231,11 @@
           data-close-modal
         />
         <!-- form -->
-        <form data-form-type="edit-book" data-book-id="">
+        <form
+          data-form-type="edit-book"
+          class="manage-books-form"
+          data-book-id=""
+        >
           <!-- title -->
           <div class="form-row">
             <h1>Edit Book</h1>
@@ -214,85 +244,106 @@
           <span class="card-divider"></span>
 
           <!-- inputs -->
-          <div class="inputs form-row">
+          <div class="inputs form-row book-inputs">
             <div class="book-form-fields">
-              <input
-                class="field-model"
-                type="text"
-                name="isbn"
-                placeholder="ISBN"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="title"
-                placeholder="Title"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="subtitle"
-                placeholder="Subtitle"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="author"
-                placeholder="Author"
-              />
-              <input
-                class="field-model"
-                type="number"
-                name="page_count"
-                placeholder="Pages"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="language"
-                placeholder="Language"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="publisher"
-                placeholder="Publisher"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="published_at"
-                placeholder="Published Date"
-              />
-              <input
-                class="field-model"
-                type="number"
-                name="total_copies"
-                placeholder="Total Copies"
-              />
-              <input
-                class="field-model"
-                type="text"
-                name="description"
-                placeholder="Description"
-              />
-            </div>
+              <!-- book info -->
+              <div class="fields-group">
+                <p>Book Info</p>
+                <div class="fields">
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="isbn"
+                    placeholder="ISBN"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="title"
+                    placeholder="Title"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="subtitle"
+                    placeholder="Subtitle"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="author"
+                    placeholder="Author"
+                  />
+                </div>
+              </div>
 
-            <!-- img -->
-            <label class="file-upload">
-              <input
-                class="form-img-file"
-                id="edit-form-img-file"
-                type="file"
-                name="book_img"
-                accept="image/*"
-                hidden
-              />
-              <span class="file-btn">Upload cover</span>
-              <span class="file-name" id="edit-book-file-name"
-                >No file selected</span
-              >
-            </label>
+              <!-- publishing -->
+              <div class="fields-group">
+                <p>Publishing</p>
+                <div class="fields">
+                  <input
+                    class="field-model"
+                    type="number"
+                    name="page_count"
+                    placeholder="Pages"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="language"
+                    placeholder="Language"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="publisher"
+                    placeholder="Publisher"
+                  />
+                  <input
+                    class="field-model"
+                    type="text"
+                    name="published_at"
+                    placeholder="Published Date"
+                  />
+                </div>
+              </div>
+
+              <!-- inventory -->
+              <div class="fields-group">
+                <p>Inventory</p>
+                <div class="fields">
+                  <input
+                    class="field-model"
+                    type="number"
+                    name="total_copies"
+                    placeholder="Total Copies"
+                  />
+                </div>
+              </div>
+
+              <!-- additional -->
+              <div class="fields-group">
+                <p>Additional</p>
+                <div class="fields additional">
+                  <textarea name="description" class="field-model"> </textarea>
+                  <!-- img -->
+                  <label class="file-upload">
+                    <input
+                      class="form-img-file"
+                      id="edit-form-img-file"
+                      type="file"
+                      name="book_img"
+                      accept="image/*"
+                      hidden
+                    />
+                    <span class="file-btn">Upload cover</span>
+                    <span class="file-name" id="edit-book-file-name"
+                      >No file selected</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
 
           <span class="card-divider"></span>
